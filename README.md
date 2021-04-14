@@ -14,3 +14,6 @@ Simplab in simple words is simply a virtual platform to simulate physics experim
 
 ## What problem does Simplab solve?
 - Due to **COVID-19**, most schools and universities are shut, resulting in a lack of practical knowledge from lab experiments.
+
+## Developers
+- Mayank Meena 19114055 [mail](mailto:mayank_m@cs.iitr.ac.in) [website](https://mayankmeena.netlify.app/)

@@ -18,3 +18,4 @@ Simplab in simple words is simply a virtual platform to simulate physics experim
 ## Developers
 - Mayank Meena 19114055 [mail](mailto:mayank_m@cs.iitr.ac.in) [website](https://mayankmeena.netlify.app/)
 - Anikait Agrawal 19114008 [mail](mailto:anikait_a@iitr.ac.in)
+- Bhupenrdra Malakar 19114022 [mail](mailto:bhupendra_m@cs.iitr.ac.in)

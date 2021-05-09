@@ -4,7 +4,7 @@ import { createBottomTabNavigator, createAppContainer} from 'react-navigation';
 //import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';  
 //import Icon from 'react-native-vector-icons/Ionicons';  
 
-export default function Home() {
+export default function Profile() {
     return (
         <Text>Hello this is Profile Screen</Text>
     )

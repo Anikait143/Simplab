@@ -3,14 +3,9 @@ import {View, TextInput, Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 /*import { MaterialCommunityIcons } from '@expo/vector-icons';*/
 // import Auth from './android/app/src/screens/Auth/Auth';
 import Home from '../Simplab_App/android/app/src/screens/Home/Home';
-import Profile from "./android/app/src/screens/Profile/Profile";
-import alerts from "./android/app/src/screens/alerts/alerts";
-import Experiments from "./android/app/src/screens/Experiments/Experiments";
-import Settings from "./android/app/src/screens/Settings/Settings";
 
 const AuthContext = React.createContext();
 const Stack = createStackNavigator();

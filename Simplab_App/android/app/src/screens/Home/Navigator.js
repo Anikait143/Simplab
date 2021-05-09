@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 //import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../Home/Home";
-import Profile from "../Profile/Profile";
-import alerts from "../alerts/alerts";
-import Experiments from "../Experiments/Experiments";
-import { NavigationContainer } from "@react-navigation/native";
-import Settings from "../Settings/Settings";
+import {StyleSheet} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Home from '../Home/Home';
+import Profile from '../Profile/Profile';
+import alerts from '../alerts/alerts';
+import Experiments from '../Experiments/Experiments';
+import {NavigationContainer} from '@react-navigation/native';
+import Settings from '../Settings/Settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +16,7 @@ const Navigator = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-      initialRouteName={'Home'}
+        initialRouteName={'Home'}
         /*screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -35,16 +35,15 @@ const Navigator = () => {
           },
         })}*/
         tabBarOptions={{
-          activeTintColor: "#ff005a",
-          inactiveTintColor: "#B8B8B8",
-          inactiveBackgroundColor: "white",
+          activeTintColor: '#ff005a',
+          inactiveTintColor: '#B8B8B8',
+          inactiveBackgroundColor: 'white',
           tabStyle: {
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             fontWeight: 1000,
           },
-        }}
-      >
+        }}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="alerts" component={alerts} />
         <Tab.Screen name="Experiments" component={Experiments} />

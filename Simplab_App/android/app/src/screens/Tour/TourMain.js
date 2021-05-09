@@ -5,8 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Tour1 from './tour1';
 import Tour2 from './tour2';
 import Tour3 from './tour3';
-import LoginScreen from '../AuthScreen/LoginScreen';
-import SigninScreen from '../AuthScreen/SigninScreen';
+import LoginScreen from '../AuthScreen/Signin';
+import SigninScreen from '../AuthScreen/Signup';
 import GetStarted from './GetStarted';
 import ForgotPassword from '../AuthScreen/ForgotPassword'
 
@@ -15,7 +15,6 @@ const Stack = createStackNavigator();
 
 export default function TourMain() {
     return (
-        <NavigationContainer>
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="GetStarted" component={GetStarted} />
           <Stack.Screen name="Tour1" component={Tour1} />
@@ -27,6 +26,5 @@ export default function TourMain() {
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
   
         </Stack.Navigator>
-      </NavigationContainer>
     )
 }

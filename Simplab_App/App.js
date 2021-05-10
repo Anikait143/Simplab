@@ -1,125 +1,43 @@
 import * as React from 'react';
-import {View, TextInput, Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Home from '../Simplab_App/android/app/src/screens/Home/Home';
+import {Provider as AuthProvider} from './android/app/src/context/AuthContext';
+import {Context as AuthContext} from './android/app/src/context/AuthContext';
 import TourMain from './android/app/src/screens/Tour/TourMain';
+import Home from './android/app/src/screens/Home/Home'
 
-const AuthContext = React.createContext();
 const Stack = createStackNavigator();
 
-export default function App({navigation}) {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    },
-  );
-
-  React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
-    const bootstrapAsync = async () => {
-      let userToken;
-
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        // Restoring token failed
-      }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({type: 'RESTORE_TOKEN', token: userToken});
-    };
-
-    bootstrapAsync();
-  }, []);
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `SecureStore`
-        // In the example, we'll use a dummy token
-        console.log(data);
-        await AsyncStorage.setItem('userToken', 'userId123');
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
-      },
-      signOut: () => dispatch({type: 'SIGN_OUT'}),
-      signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `SecureStore`
-        // In the example, we'll use a dummy token
-
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
-      },
-    }),
-    [],
-  );
-
-  function SignInScreen() {
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
-
-    const {signIn} = React.useContext(AuthContext);
-
-    return (
-      <View>
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Button title="Sign in" onPress={() => signIn({username, password})} />
-      </View>
-    );
-  }
-
+function App() {
+  const {state} = React.useContext(AuthContext);
+  console.log(state);
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          {state.userToken == null ? (
-            <Stack.Screen name="Auth" component={TourMain} />
-          ) : (
-            <Stack.Screen name="Home" component={Home} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {state.token === null ? (
+          <>
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="Auth"
+              component={TourMain}
+            />
+          </>
+        ) : (
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Home"
+            component={Home}
+          />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
+
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+};

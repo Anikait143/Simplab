@@ -13,14 +13,12 @@ import bckImage from './Login/Backgrounf.png';
 import Textimg from './Login/LoginTitle.png';
 import Google from './Login/google.png';
 import img from './Login/Orimage.png';
+import {Context as AuthContext} from '../../context/AuthContext';
 
-export default function LoginScreen({navigation}) {
-  const [Email, onChangeEmail] = React.useState('');
-  const [Password, onChangePassword] = React.useState('');
-  
-  const signInUser =()=>{
-    return 
-  }
+export default function Signin({navigation}) {
+  const [email, onChangeEmail] = React.useState('');
+  const [password, onChangePassword] = React.useState('');
+  const {state, signin} = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -29,7 +27,7 @@ export default function LoginScreen({navigation}) {
 
         <TouchableOpacity
           style={styles.signupbutton}
-          onPress={() => navigation.navigate('Signin')}>
+          onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.signuptext}>Sign up</Text>
         </TouchableOpacity>
         <View
@@ -42,8 +40,8 @@ export default function LoginScreen({navigation}) {
             style={styles.Textinput}
             label="Email"
             onChangeText={text => onChangeEmail(text)}
-            value={Email}
-            placeholder="USERNAME"
+            value={email}
+            placeholder="Email"
             placeholderTextColor="#9C9C9C"
           />
 
@@ -51,12 +49,16 @@ export default function LoginScreen({navigation}) {
             style={styles.Textinput}
             label="Password"
             onChangeText={text => onChangePassword(text)}
-            value={Password}
+            value={password}
             placeholder="PASSWORD"
             placeholderTextColor="#9C9C9C"
           />
 
-          <Button color="#F37A27" title="Sign In" onPress={()=> signInUser()} />
+          <Button
+            color="#F37A27"
+            title="Sign In"
+            onPress={() => signin({email, password})}
+          />
 
           <TouchableOpacity
             style={{marginTop: 15, marginBottom: 20}}

@@ -16,6 +16,7 @@ import teamImg from './AlertsAssets/team.png';
 
 const DATA = [
   {
+    key: 1,
     timeNotif: '10:15pm',
     dayNotif: 'wed',
     isAssignment: true,
@@ -27,6 +28,7 @@ const DATA = [
     dueDate: '19 Apr',
   },
   {
+    key: 2,
     timeNotif: '10:15pm',
     dayNotif: 'wed',
     isAssignment: false,
@@ -95,7 +97,7 @@ const ItemTeamAdded = ({item}) => (
   </View>
 );
 
-export default function Settings({navigation}) {
+export default function alerts({navigation}) {
   return (
     <View style={styles.container}>
       <ImageBackground source={bckImage} style={styles.imageBackground}>

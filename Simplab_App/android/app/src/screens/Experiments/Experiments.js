@@ -61,7 +61,7 @@ const Item = ({item}) => (
   </View>
 );
 
-export default function Settings({navigation}) {
+export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
 

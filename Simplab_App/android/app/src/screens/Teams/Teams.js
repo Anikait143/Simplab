@@ -14,15 +14,11 @@ import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import SimplabText from '../Home/images/SIMPLAB.png';
 import dots from '../Home/images/dots.png';
-import des1 from '../Home/images/Intersect.png';
-import des2 from '../Home/images/Intersect-3.png';
-import des3 from '../Home/images/Intersect-1.png';
-import des4 from '../Home/images/path166.png';
-import des5 from '../Home/images/Intersect-2.png';
 import profphoto from '../Home/images/Ellipse-9.png';
 import lib from '../Home/images/lib.png';
 import create from '../Home/images/create.png';
 import hash from '../Home/images/hash.png';
+import pattern from '../alerts/AlertsAssets/intersect2.png'
 import router from '../Team/router';
 
 export default function Teams({navigation}) {
@@ -36,24 +32,18 @@ export default function Teams({navigation}) {
       <View style={styles.container}>
         <ImageBackground source={bckImage} style={styles.imageBackground}>
           <View style={{width: '100%', marginBottom: 20}}>
-            <View style={{flexDirection: 'row'}}>
-              <Menu
-                style={{
-                  marginTop: 40,
-                  marginLeft: 20,
-                  borderRadius: 10,
-                  width: 200,
-                  backgroundColor: '#3C3C3C',
-                }}
-                ref={ref => (_menu = ref)}
-                button={
-                  <TouchableOpacity onPress={() => _menu.show()}>
-                    <Image
-                      style={{marginBottom: 20, marginTop: 49, marginLeft: 20}}
-                      source={dots}
-                    />
-                  </TouchableOpacity>
-                }>
+            <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <Menu
+              style = {{marginTop: 40, marginLeft:20, borderRadius:10, width:200, backgroundColor: '#3C3C3C'}}
+              ref={(ref) => (_menu = ref)}
+              button = {
+                <TouchableOpacity onPress={() => _menu.show()}>
+                  <Image
+                    style={{marginBottom: 20, marginTop: 49, marginLeft: -10, height: 30}}
+                    source={dots}
+                  />
+                </TouchableOpacity>
+              }>
                 <MenuItem
                   style={{marginLeft: -3}}
                   onPress={() => {
@@ -119,7 +109,7 @@ export default function Teams({navigation}) {
                 </MenuItem>
               </Menu>
               <Image
-                style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
+                style={{marginBottom: 20, marginTop: 49, marginLeft: -30, width: 200, height:40}}
                 source={SimplabText}
               />
               <TouchableOpacity
@@ -128,7 +118,8 @@ export default function Teams({navigation}) {
                   height: 70,
                   width: 70,
                   //marginRight: 10,
-                  marginLeft: 70,
+                  //marginLeft: 70,
+                  alignSelf: 'center',
                   marginTop: 25,
                 }}
                 onPress={() => navigation.navigate('profile')}>
@@ -296,138 +287,75 @@ export default function Teams({navigation}) {
                 backgroundColor: '#1E2326',
                 borderRadius: 12,
                 height: 91,
-                alignSelf: 'stretch',
+                alignSelf: 'auto',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 20,
               }}
-              onPress={() => navigation.navigate('router')}>
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                  }}>
-                  Class 12 Physics
-                </Text>
-                <View>
-                  <Image
-                    source={des1}
-                    style={{height: 40, marginLeft: 130, marginTop: 10}}
-                  />
-                  <Image
-                    source={des2}
-                    style={{height: 35, marginLeft: 128, marginTop: 5}}
-                  />
-                  <Image
-                    source={des3}
-                    style={{height: 45, marginLeft: 105, marginTop: -42}}
-                  />
-                  <Image
-                    source={des4}
-                    style={{height: 45, marginLeft: 95, marginTop: -72}}
-                  />
-                  <Image
-                    source={des5}
-                    style={{height: 35, marginLeft: -30, marginTop: -10}}
-                  />
-                </View>
-              </View>
+              onPress={() => console.log('hi')}>
+              <Text
+                style={{
+                  marginLeft: 15,
+                  marginTop: 10,
+                  fontWeight: '700',
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                }}>
+                Class 12 Physics
+              </Text>
+              <Image source={pattern} style={{ height:90,width:100, alignSelf: 'stretch' }} />
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 backgroundColor: '#1E2326',
                 borderRadius: 12,
                 height: 91,
-                alignSelf: 'stretch',
+                alignSelf: 'auto',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 20,
               }}
               onPress={() => console.log('hi')}>
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                  }}>
-                  Class 12 Physics
-                </Text>
-                <View>
-                  <Image
-                    source={des1}
-                    style={{height: 40, marginLeft: 130, marginTop: 10}}
-                  />
-                  <Image
-                    source={des2}
-                    style={{height: 35, marginLeft: 128, marginTop: 5}}
-                  />
-                  <Image
-                    source={des3}
-                    style={{height: 45, marginLeft: 105, marginTop: -42}}
-                  />
-                  <Image
-                    source={des4}
-                    style={{height: 45, marginLeft: 95, marginTop: -72}}
-                  />
-                  <Image
-                    source={des5}
-                    style={{height: 35, marginLeft: -30, marginTop: -10}}
-                  />
-                </View>
-              </View>
+              <Text
+                style={{
+                  marginLeft: 15,
+                  marginTop: 10,
+                  fontWeight: '700',
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                }}>
+                Class 12 Physics
+              </Text>
+              <Image source={pattern} style={{ height:90,width:100, alignSelf: 'stretch' }} />
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 backgroundColor: '#1E2326',
                 borderRadius: 12,
                 height: 91,
-                alignSelf: 'stretch',
+                alignSelf: 'auto',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 20,
               }}
               onPress={() => console.log('hi')}>
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                  }}>
-                  Class 12 Physics
-                </Text>
-                <View>
-                  <Image
-                    source={des1}
-                    style={{height: 40, marginLeft: 130, marginTop: 10}}
-                  />
-                  <Image
-                    source={des2}
-                    style={{height: 35, marginLeft: 128, marginTop: 5}}
-                  />
-                  <Image
-                    source={des3}
-                    style={{height: 45, marginLeft: 105, marginTop: -42}}
-                  />
-                  <Image
-                    source={des4}
-                    style={{height: 45, marginLeft: 95, marginTop: -72}}
-                  />
-                  <Image
-                    source={des5}
-                    style={{height: 35, marginLeft: -30, marginTop: -10}}
-                  />
-                </View>
-              </View>
+              <Text
+                style={{
+                  marginLeft: 15,
+                  marginTop: 10,
+                  fontWeight: '700',
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                }}>
+                Class 12 Physics
+              </Text>
+              <Image source={pattern} style={{ height:90,width:100, alignSelf: 'stretch' }} />
             </TouchableOpacity>
           </View>
         </ImageBackground>

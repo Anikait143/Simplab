@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import { StyleSheet,ScrollView, Button, View,ImageBackground ,Text,TextInput,Image,TouchableOpacity} from 'react-native';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
@@ -13,18 +13,19 @@ import profphoto from '../Home/images/Ellipse-9.png';
 import lib from '../Home/images/lib.png';
 import create from '../Home/images/create.png';
 import hash from '../Home/images/hash.png';
-import library from '../Home/images/Library.png';
-import createteam from '../Home/images/Create-Team.png';
-import jointeam from '../Home/images/Join-Team.png';
-import profile from '../Profile/Profile';
 
 
 export default function Teams({navigation}) {
+  const [ShowCreateTeam, setShowCreateTeam] = useState(false);
+  const [ShowJoinTeam, setShowJoinTeam] = useState(false);
+  const [Code, onChangeCode] = React.useState('');
+  const [Title, onChangeTitle] = React.useState('');
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <ImageBackground source={bckImage} style={styles.imageBackground}>
-          <View style={{width: '100%'}}>
+          <View style={{width: '100%', marginBottom: 20}}>
             <View style = {{flexDirection: 'row'}}>
             <Menu
               style = {{marginTop: 40, marginLeft:20, borderRadius:10, width:200, backgroundColor: '#3C3C3C'}}
@@ -40,7 +41,8 @@ export default function Teams({navigation}) {
               <MenuItem
                 style = {{marginLeft: -3}}
                 onPress={() => {
-                  console.log('hi');
+                  setShowJoinTeam(false);
+                  setShowCreateTeam(true);
                   _menu.hide();
                 }}>
                 <Image
@@ -61,7 +63,8 @@ export default function Teams({navigation}) {
               </MenuItem>
               <MenuItem
                 onPress={() => {
-                  console.log('hi1');
+                  setShowJoinTeam(true);
+                  setShowCreateTeam(false);
                   _menu.hide();
                 }}>
                 <Image
@@ -121,7 +124,134 @@ export default function Teams({navigation}) {
                 </View>
               </TouchableOpacity>
             </View>
-            
+            { ShowCreateTeam ? (
+            <View style={{backgroundColor: '#3C3C3C', alignSelf: 'stretch', borderRadius: 8, height: 144, marginHorizontal: 10, marginTop: 20}}>
+              <TextInput
+                style={styles.Textinput}
+                label="Enter Code"
+                onChangeText={text => onChangeCode(text)}
+                value={Code}
+                placeholder="# Enter Code"
+                placeholderTextColor="#AAAAAA"
+              />
+              <View style = {{flexDirection:'row', justifyContent: 'flex-end', marginTop: 20}}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#F37A27',
+                  borderRadius: 6,
+                  height: 35,
+                  width: 91,
+                  marginRight: 15,
+                  marginTop: 15,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  //textAlignVertical: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => console.log('hi')}>
+                <Text
+                  style={{
+                    //textAlignVertical: 'center',
+                    fontWeight: '700',
+                    fontSize: 16,
+                    color: '#FFFFFF',
+                  }}>
+                  Join Team
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#333333',
+                  borderRadius: 6,
+                  borderColor: 'white',
+                  borderWidth: 2,
+                  height: 35,
+                  width: 91,
+                  marginRight: 15,
+                  marginTop: 15,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  //textAlignVertical: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => setShowCreateTeam(false)}>
+                <Text
+                  style={{
+                    //textAlignVertical: 'center',
+                    fontWeight: '700',
+                    fontSize: 16,
+                    color: '#FFFFFF',
+                  }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              </View>
+            </View>
+            ) : null}
+            { ShowJoinTeam ? (
+            <View style={{backgroundColor: '#3C3C3C', alignSelf: 'stretch', borderRadius: 8, height: 144, marginHorizontal: 10, marginTop: 20}}>
+              <TextInput
+                style={styles.Textinput}
+                label="Enter Title"
+                onChangeText={text => onChangeTitle(text)}
+                value={Title}
+                placeholder="Enter Title"
+                placeholderTextColor="#AAAAAA"
+              />
+              <View style = {{flexDirection:'row', justifyContent: 'flex-end', marginTop: 20}}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#F37A27',
+                  borderRadius: 6,
+                  height: 35,
+                  width: 106,
+                  marginRight: 15,
+                  marginTop: 15,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  //textAlignVertical: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => console.log('hi')}>
+                <Text
+                  style={{
+                    //textAlignVertical: 'center',
+                    fontWeight: '700',
+                    fontSize: 16,
+                    color: '#FFFFFF',
+                  }}>
+                  Create Team
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#333333',
+                  borderRadius: 6,
+                  borderColor: 'white',
+                  borderWidth: 2,
+                  height: 35,
+                  width: 91,
+                  marginRight: 15,
+                  marginTop: 15,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  //textAlignVertical: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => setShowJoinTeam(false)}>
+                <Text
+                  style={{
+                    //textAlignVertical: 'center',
+                    fontWeight: '700',
+                    fontSize: 16,
+                    color: '#FFFFFF',
+                  }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              </View>
+            </View>
+            ) : null}
             <TouchableOpacity
               style={{
                 backgroundColor: '#1E2326',
@@ -268,6 +398,8 @@ const styles = StyleSheet.create({
     height: 46,
     borderRadius: 6,
     paddingLeft: 20,
+    marginHorizontal: 20,
+    marginTop: 15
   },
   imageBackground: {
     flex: 1,

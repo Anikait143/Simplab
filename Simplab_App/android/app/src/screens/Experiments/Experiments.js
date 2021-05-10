@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import bckImage from './ExperimentsAssets/bckImage.png';
 import Intersect from './ExperimentsAssets/Intersect.png';
+import Intersect2 from './ExperimentsAssets/intersect2.png';
 import experimentsText from './ExperimentsAssets/expText.png';
 import arrowDown from './ExperimentsAssets/arrowDown.png';
 import arrowUp from './ExperimentsAssets/arrowUp.png';
@@ -53,6 +54,7 @@ const Item = ({item}) => (
       style={{top: 10, left: 0, alignSelf: 'flex-start'}}
       source={Intersect}
     />
+    <Image style={{top: -55, alignSelf: 'flex-end'}} source={Intersect2} />
     <Text style={item.isComplete ? styles.dueDate : styles.dueDateOrange}>
       {item.dueDate}
     </Text>
@@ -143,6 +145,8 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   item: {
+    height: 90,
+    margin: 6,
     backgroundColor: '#1E2326',
     borderRadius: 9,
     marginVertical: 4,
@@ -166,18 +170,18 @@ const styles = StyleSheet.create({
     left: 50,
   },
   dueDateOrange: {
+    top: -80,
     color: '#F27A27',
     paddingRight: 12,
-    paddingBottom: 12,
     fontSize: 11,
     fontFamily: 'Montserrat',
     fontWeight: '600',
     alignSelf: 'flex-end',
   },
   dueDate: {
+    top: -80,
     color: '#A1A1A1',
     paddingRight: 12,
-    paddingBottom: 12,
     fontSize: 11,
     fontFamily: 'Montserrat',
     fontWeight: '600',

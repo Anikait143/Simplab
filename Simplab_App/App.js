@@ -14,7 +14,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {state.token !== null ? (
+        {state.token === null ? (
           <>
             <Stack.Screen
               options={{headerShown: false}}

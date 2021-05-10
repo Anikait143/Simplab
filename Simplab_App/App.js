@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Home from '../Simplab_App/android/app/src/screens/Home/Home';
+import Profile from '../Simplab_App/android/app/src/screens/Profile/Profile';
 import TourMain from './android/app/src/screens/Tour/TourMain';
 
 const AuthContext = React.createContext();

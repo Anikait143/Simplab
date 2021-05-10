@@ -101,6 +101,7 @@ export default function Settings({navigation}) {
                 alignSelf: 'flex-end',
                 alignItems: 'center',
                 textAlignVertical: 'center',
+                justifyContent: 'center'
               }}
               onPress={() => console.log('hi')}>
               <Text

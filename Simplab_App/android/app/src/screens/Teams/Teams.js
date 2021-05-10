@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet,ScrollView, Button, View,ImageBackground ,Text,TextInput,Image,TouchableOpacity} from 'react-native';
+import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import SimplabText from '../Home/images/SIMPLAB.png';
 import dots from '../Home/images/dots.png';
@@ -9,6 +10,12 @@ import des3 from '../Home/images/Intersect-1.png';
 import des4 from '../Home/images/path166.png';
 import des5 from '../Home/images/Intersect-2.png';
 import profphoto from '../Home/images/Ellipse-9.png';
+import lib from '../Home/images/lib.png';
+import create from '../Home/images/create.png';
+import hash from '../Home/images/hash.png';
+import library from '../Home/images/Library.png';
+import createteam from '../Home/images/Create-Team.png';
+import jointeam from '../Home/images/Join-Team.png';
 import profile from '../Profile/Profile';
 
 
@@ -19,12 +26,82 @@ export default function Teams({navigation}) {
         <ImageBackground source={bckImage} style={styles.imageBackground}>
           <View style={{width: '100%'}}>
             <View style = {{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => console.log('hi')}>
-              <Image
-                style={{marginBottom: 20, marginTop: 49, marginLeft: 20}}
-                source={dots}
-              />
-            </TouchableOpacity>
+            <Menu
+              style = {{marginTop: 40, marginLeft:20, borderRadius:10, width:200, backgroundColor: '#3C3C3C'}}
+              ref={(ref) => (_menu = ref)}
+              button = {
+                <TouchableOpacity onPress={() => _menu.show()}>
+                  <Image
+                    style={{marginBottom: 20, marginTop: 49, marginLeft: 20}}
+                    source={dots}
+                  />
+                </TouchableOpacity>
+              }>
+              <MenuItem
+                style = {{marginLeft: -3}}
+                onPress={() => {
+                  console.log('hi');
+                  _menu.hide();
+                }}>
+                <Image
+                  style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
+                  source={create}
+                />
+                <Text
+                  style = {{
+                    marginLeft: 25,
+                    marginTop: 10,
+                    fontWeight: '700',
+                    fontSize: 15,
+                    color: '#FFFFFF',
+                  }}
+                >
+                  Create Team
+                </Text>
+              </MenuItem>
+              <MenuItem
+                onPress={() => {
+                  console.log('hi1');
+                  _menu.hide();
+                }}>
+                <Image
+                  style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
+                  source={hash}
+                />
+                <Text
+                  style = {{
+                    marginLeft: 15,
+                    marginTop: 10,
+                    fontWeight: '700',
+                    fontSize: 15,
+                    color: '#FFFFFF',
+                  }}
+                >
+                  Join Team with Code
+                </Text>
+              </MenuItem>
+              <MenuItem
+                onPress={() => {
+                  console.log('hi2');
+                  _menu.hide();
+                }}>
+                <Image
+                  style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
+                  source={lib}
+                />
+                <Text
+                  style = {{
+                    marginLeft: 15,
+                    marginTop: 10,
+                    fontWeight: '700',
+                    fontSize: 15,
+                    color: '#FFFFFF',
+                  }}
+                >
+                  Library
+                </Text>
+              </MenuItem>
+            </Menu>
               <Image
                 style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
                 source={SimplabText}

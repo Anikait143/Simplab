@@ -2,6 +2,7 @@ from django.db import models
 
 class User(models.Model):
     Username = models.CharField(max_length=50)
+    password = models.CharField(max_length=16)
     email = models.EmailField(max_length=254)
     courses_enrolled = models.TextField()
     profile_picture = models.ImageField()

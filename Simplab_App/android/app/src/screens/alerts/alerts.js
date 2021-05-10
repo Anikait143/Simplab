@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import bckImage from './AlertsAssets/bckImage.png';
 import Intersect from './AlertsAssets/Intersect.png';
+import Intersect2 from './AlertsAssets/intersect2.png';
 import alertsText from './AlertsAssets/Alerts.png';
 import teamImg from './AlertsAssets/team.png';
 
@@ -50,6 +51,7 @@ const ItemAssignment = ({item}) => (
       style={{top: 16, left: 0, alignSelf: 'flex-start'}}
       source={Intersect}
     />
+    <Image style={{top: -45, alignSelf: 'flex-end'}} source={Intersect2} />
     <Text style={styles.notiftime}>
       {`${item.timeNotif}\n${item.dayNotif}`}
     </Text>
@@ -86,6 +88,7 @@ const ItemTeamAdded = ({item}) => (
       }}>
       {item.team}
     </Text>
+    <Image style={{top: -34, alignSelf: 'flex-end'}} source={Intersect2} />
     <Text style={styles.notiftime}>
       {`${item.timeNotif}\n${item.dayNotif}`}
     </Text>
@@ -128,6 +131,8 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   item: {
+    height: 100,
+    margin: 6,
     backgroundColor: '#1E2326',
     borderRadius: 9,
     marginVertical: 4,
@@ -160,6 +165,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   notiftime: {
+    top: -80,
     color: '#A1A1A1',
     paddingRight: 10,
     paddingBottom: 12,

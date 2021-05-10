@@ -20,7 +20,7 @@ function App() {
             <Stack.Screen name="Auth" component={TourMain} />
           </>
         ) : (
-          <Stack.Screen name="router" component={Home} />
+          <Stack.Screen name="Home" component={Home} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

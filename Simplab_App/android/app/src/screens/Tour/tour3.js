@@ -14,7 +14,7 @@ export default function tour3({ navigation}) {
 
 
         <TouchableOpacity style={styles.skipbutton}
-        onPress={() => navigation.navigate('Login')}>
+        onPress={() => navigation.navigate('Signin')}>
         <Text style={styles.skiptext}>Skip {'>'}</Text>
         </TouchableOpacity>
 
@@ -24,7 +24,7 @@ export default function tour3({ navigation}) {
         <Image source={left}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rightbutton}
-        onPress={() => navigation.navigate('Login')}>
+        onPress={() => navigation.navigate('Signin')}>
         <Image source={right}/>
         </TouchableOpacity>
         </ImageBackground>

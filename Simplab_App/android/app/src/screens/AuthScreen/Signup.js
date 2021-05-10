@@ -18,7 +18,7 @@ import Passwordicon from './SignInassets/password.png';
 import confirmPasswordicon from './SignInassets/confirmPassword.png';
 import usernameicon from './SignInassets/Username.png';
 
-export default function SigninScreen({navigation}) {
+export default function Signup({navigation}) {
   const [Username, onChangeUsername] = React.useState('');
   const [Email, onChangeEmail] = React.useState('');
   const [Password, onChangePassword] = React.useState('');
@@ -27,9 +27,13 @@ export default function SigninScreen({navigation}) {
   return (
     <View style={styles.container}>
       <ImageBackground source={bckImage} style={styles.imageBackground}>
+        <TouchableOpacity
+          style={styles.signupbutton}
+          onPress={() => navigation.navigate('Signin')}>
+          <Text style={styles.signuptext}>Back</Text>
+        </TouchableOpacity>
         <View style={{width: '100%', alignItems: 'center'}}>
           <Image style={{marginBottom: 40}} source={signuptext} />
-
           <View style={styles.Textinputcontainer}>
             <Image source={usernameicon} style={styles.texticon} />
             <TextInput

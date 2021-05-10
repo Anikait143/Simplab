@@ -18,6 +18,7 @@ const authReducer = (state, action) => {
 const signup = dispatch => {
   return ({email, password}) => {
     console.log('Signup');
+    console.log(email, password);
   };
 };
 

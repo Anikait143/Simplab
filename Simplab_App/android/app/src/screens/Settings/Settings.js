@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -16,6 +16,7 @@ import edit from './SettingsAssets/edit.png';
 import info from './SettingsAssets/info.png';
 import logOut from './SettingsAssets/log-out.png';
 import settingsText from './SettingsAssets/settingsText.png';
+import {Context as AuthContext} from '../../context/AuthContext';
 
 export default function Settings({navigation}) {
   const [contact, onChangeContact] = React.useState('');
@@ -24,6 +25,8 @@ export default function Settings({navigation}) {
   const [newPassword, onChangeNewPassword] = React.useState('');
   const [confPassword, onChangeconfPassword] = React.useState('');
   const [showNotif, onChangeShowNotif] = React.useState(true);
+
+  const {state, signout} = useContext(AuthContext);
 
   return (
     <ScrollView>
@@ -101,7 +104,7 @@ export default function Settings({navigation}) {
                 alignSelf: 'flex-end',
                 alignItems: 'center',
                 textAlignVertical: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               onPress={() => console.log('hi')}>
               <Text
@@ -131,7 +134,7 @@ export default function Settings({navigation}) {
                 <Text style={styles.buttontext}>About us</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('hi')}>
+            <TouchableOpacity onPress={() => signout()}>
               <View style={styles.button}>
                 <Image source={logOut} style={styles.buttonicon} />
                 <Text style={styles.buttontext}>Log Out</Text>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Button,
@@ -17,12 +17,15 @@ import emailicon from './SignInassets/mail.png';
 import Passwordicon from './SignInassets/password.png';
 import confirmPasswordicon from './SignInassets/confirmPassword.png';
 import usernameicon from './SignInassets/Username.png';
+import {Context as AuthContext} from '../../context/AuthContext';
 
 export default function Signup({navigation}) {
   const [Username, onChangeUsername] = React.useState('');
-  const [Email, onChangeEmail] = React.useState('');
-  const [Password, onChangePassword] = React.useState('');
+  const [email, onChangeEmail] = React.useState('');
+  const [password, onChangePassword] = React.useState('');
   const [confPassword, onChangeconfPassword] = React.useState('');
+
+  const {state, signup} = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -52,7 +55,7 @@ export default function Signup({navigation}) {
               style={styles.Textinput}
               label="Email"
               onChangeText={text => onChangeEmail(text)}
-              value={Email}
+              value={email}
               placeholder="Enter Your Email"
               placeholderTextColor="#9C9C9C"
             />
@@ -64,7 +67,7 @@ export default function Signup({navigation}) {
               style={styles.Textinput}
               label="Password"
               onChangeText={text => onChangePassword(text)}
-              value={Password}
+              value={password}
               placeholder="Enter Your Password"
               placeholderTextColor="#9C9C9C"
             />
@@ -84,7 +87,7 @@ export default function Signup({navigation}) {
 
           <TouchableOpacity
             style={{marginTop: 15}}
-            onPress={() => console.log('hi')}>
+            onPress={() => signup({email, password})}>
             <Image source={next} />
           </TouchableOpacity>
         </View>

@@ -9,6 +9,7 @@ import Teams from "../Teams/Teams";
 import alerts from "../alerts/alerts";
 import Experiments from "../Experiments/Experiments";
 import Settings from "../Settings/Settings";
+import ExperimaentDetail from '../../ExperimentDetail/ExperimentDetail'
 
 export default function Home() {
     const Tab = createBottomTabNavigator();
@@ -28,6 +29,20 @@ export default function Home() {
             inactiveTintColor: '#FFFFFF'
         }}
       >
+        <Tab.Screen
+          name="Test"
+          component={ExperimaentDetail}
+          options={{
+            tabBarLabel: 'Detail',
+            tabBarIcon: ({ focused, color }) => (
+            <Image
+              source={focused ? require('./images/focus-team.png'):require('./images/white-team.png')}
+              resizeMode='contain'
+              style={{width: 30, height: 30}}
+            />
+            ),
+          }}
+        />
         <Tab.Screen
           name="Teams"
           component={Teams}

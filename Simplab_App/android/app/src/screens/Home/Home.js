@@ -5,7 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 //import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 //import Icon from 'react-native-vector-icons/Ionicons';
 import Profile from '../Profile/Profile';
-import Teams from '../TeamsList/TeamsList';
+import Teams from '../Teams/Teams';
 import alerts from '../alerts/alerts';
 import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';

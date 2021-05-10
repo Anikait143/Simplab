@@ -6,6 +6,8 @@ import {Context as AuthContext} from './android/app/src/context/AuthContext';
 import TourMain from './android/app/src/screens/Tour/TourMain';
 import Home from './android/app/src/screens/Home/Home';
 import router from './android/app/src/screens/Team/router';
+import Profile from './android/app/src/screens/Profile/Profile'
+import Lib from './android/app/src/screens/Library/Library'
 
 const Stack = createStackNavigator();
 
@@ -20,7 +22,7 @@ function App() {
             <Stack.Screen name="Auth" component={TourMain} />
           </>
         ) : (
-          <Stack.Screen name="router" component={router} />
+          <Stack.Screen name="Home" component={Home} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

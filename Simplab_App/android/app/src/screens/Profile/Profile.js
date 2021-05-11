@@ -6,12 +6,53 @@ import addpic from '../Home/images/addpic.png';
 import profpic from '../Home/images/profpic.png';
 import simpText from '../Home/images/SIMPLAB-white.png';
 import back from '../Home/images/Vector.png';
+import * as ImagePicker from "react-native-image-picker" 
 
 export default function Profile({navigation}) {
     const [email, onChangeEmail] = React.useState('pepper_sj@cs.iitr.ac.in');
     const [contact, onChangeContact] = React.useState('8821820534');
     const [organization, onChangeOrganization] = React.useState('ARMY PUBLIC SCHOOL, MHOW');
     const [name, onChangeName] = React.useState('PEPPER  STARK');
+    const [filePath, setFilePath] = useState({});
+
+    const chooseFile = () => {
+        let options = {
+            title: 'Select Image',
+            customButtons: [
+              {
+                name: 'customOptionKey',
+                title: 'Choose Photo from Custom Option'
+              },
+            ],
+            storageOptions: {
+              skipBackup: true,
+              path: 'images',
+            },
+          };
+        ImagePicker.launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+      
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log(
+                'User tapped custom button: ',
+                response.customButton
+              );
+              alert(response.customButton);
+            } else {
+              let source = response;
+              // You can also display the image using data:
+              // let source = {
+              //   uri: 'data:image/jpeg;base64,' + response.data
+              // };
+              setFilePath(source);
+              //console.log(filePath.uri);
+            }
+          });
+        };
 
     return (
         <View style={{flex:1}}>
@@ -49,9 +90,9 @@ export default function Profile({navigation}) {
                             marginLeft: 10,
                             marginTop: -25,
                         }}
-                        onPress={() => console.log('hi')}>
+                        onPress={() => console.log(filePath)}>
                         <View style={{width: 160, height: 160, borderRadius: 80, backgroundColor: 'white', marginTop: 0}}>
-                            <Image source={profpic} style={{ zIndex: 1, height:150, width:150, marginTop: 5, marginLeft: 5}} />
+                            <Image source={filePath.uri ? { uri: filePath.uri }  : profpic} style={{ zIndex: 1, height:150, width:150, borderRadius: 75,marginTop: 5, marginLeft: 5}} />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -67,7 +108,7 @@ export default function Profile({navigation}) {
                             marginTop: -60,
                             zIndex: 1
                         }}
-                        onPress={() => console.log('hi1')}>
+                        onPress={chooseFile}>
                         <View style={{marginTop: -10,marginLeft:-5}}>
                             <Image source={addpic} style={{ zIndex: 1, height:65, width:65, marginTop: 0, marginLeft: 5}} />
                         </View>

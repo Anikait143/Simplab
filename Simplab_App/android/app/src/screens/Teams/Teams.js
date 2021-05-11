@@ -150,7 +150,7 @@ export default function Teams({navigation}) {
                   </View>
                 </TouchableOpacity>
               </View>
-              {ShowCreateTeam ? (
+              {ShowJoinTeam ? (
                 <View
                   style={{
                     backgroundColor: '#3C3C3C',
@@ -213,7 +213,7 @@ export default function Teams({navigation}) {
                         //textAlignVertical: 'center',
                         justifyContent: 'center',
                       }}
-                      onPress={() => setShowCreateTeam(false)}>
+                      onPress={() => setShowJoinTeam(false)}>
                       <Text
                         style={{
                           //textAlignVertical: 'center',
@@ -227,7 +227,7 @@ export default function Teams({navigation}) {
                   </View>
                 </View>
               ) : null}
-              {ShowJoinTeam ? (
+              {ShowCreateTeam ? (
                 <View
                   style={{
                     backgroundColor: '#3C3C3C',
@@ -290,7 +290,7 @@ export default function Teams({navigation}) {
                         //textAlignVertical: 'center',
                         justifyContent: 'center',
                       }}
-                      onPress={() => setShowJoinTeam(false)}>
+                      onPress={() => setShowCreateTeam(false)}>
                       <Text
                         style={{
                           //textAlignVertical: 'center',

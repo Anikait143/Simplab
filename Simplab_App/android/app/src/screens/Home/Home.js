@@ -2,6 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, View, Button, Image} from 'react-native';
 //import { createBottomTabNavigator, createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 //import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 //import Icon from 'react-native-vector-icons/Ionicons';
 import Profile from '../Profile/Profile';
@@ -9,9 +11,12 @@ import Teams from '../Teams/Teams';
 import alerts from '../alerts/alerts';
 import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';
+import Lib from '../Library/Library'
+import router from '../Team/router'
 
-export default function Home() {
-  const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
+
+function HomeTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Teams"
@@ -100,5 +105,18 @@ export default function Home() {
         }}
       />
     </Tab.Navigator>
+  );
+}
+
+const RootStack = createStackNavigator();
+
+export default function Home() {
+  return (
+      <RootStack.Navigator screenOptions={{headerShown: false}}>
+        <RootStack.Screen name="Home" component={HomeTabs} />
+        <RootStack.Screen name="Profile" component={Profile} />
+        <RootStack.Screen name="Library" component={Lib} />
+        <RootStack.Screen name="router" component={router} />
+      </RootStack.Navigator>
   );
 }

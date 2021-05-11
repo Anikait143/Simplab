@@ -13,12 +13,14 @@ import dots from './TeamAssets/menu-vertical.png';
 
 const DATA = [
   {
+    key: '1',
     name: 'guidlines.pdf',
     size: '25gb',
     by: 'sandy',
     date: '25 Apr',
   },
   {
+    key: '2',
     name: 'guidlines.pdf',
     size: '25gb',
     by: 'sandy',

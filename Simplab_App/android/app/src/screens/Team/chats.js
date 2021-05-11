@@ -12,6 +12,7 @@ import avatar from './TeamAssets/avatar.png';
 
 const DATA = [
   {
+    key: '1',
     msg:
       'koi jo mila to mujhe aesa lagta tha jaise meri sari duniya mein geeto ki rut aur rango ki barkha hai, khushbu ki aandhi hai..mehki hui si ab saari fizaaaye hai, behki hui si ab saari hawayein hai...',
     name: 'Anshika',
@@ -19,6 +20,7 @@ const DATA = [
     time: '10:00',
   },
   {
+    key: '2',
     msg:
       'koi jo mila to mujhe aesa lagta tha jaise meri sari duniya mein geeto ki rut aur rango ki barkha hai, khushbu ki aandhi hai..mehki hui si ab saari fizaaaye hai, behki hui si ab saari hawayein hai...',
     name: 'Anshika',

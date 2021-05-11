@@ -20,6 +20,7 @@ import create from '../Home/images/create.png';
 import hash from '../Home/images/hash.png';
 import pattern from '../alerts/AlertsAssets/intersect2.png';
 import Profile from '../Profile/Profile';
+import Library from '../Library/Library'
 import router from '../Team/router';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -30,7 +31,6 @@ export default function Teams({navigation}) {
   const [Title, onChangeTitle] = React.useState('');
   const Stack = createStackNavigator();
 
-  const TeamsMain = ({navigation}) => {
     return (
       <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.container}>
@@ -61,7 +61,7 @@ export default function Teams({navigation}) {
                     </TouchableOpacity>
                   }>
                   <MenuItem
-                    style={{marginLeft: -3}}
+                    style={{marginLeft: 0}}
                     onPress={() => {
                       setShowJoinTeam(false);
                       setShowCreateTeam(true);
@@ -105,7 +105,7 @@ export default function Teams({navigation}) {
                   </MenuItem>
                   <MenuItem
                     onPress={() => {
-                      console.log('hi2');
+                      navigation.navigate('Library');
                       _menu.hide();
                     }}>
                     <Image
@@ -316,7 +316,7 @@ export default function Teams({navigation}) {
                   marginLeft: 10,
                   marginTop: 20,
                 }}
-                onPress={() => console.log('hi')}>
+                onPress={() => navigation.navigate('router')}>
                 <Text
                   style={{
                     marginLeft: 15,
@@ -344,7 +344,7 @@ export default function Teams({navigation}) {
                   marginLeft: 10,
                   marginTop: 20,
                 }}
-                onPress={() => console.log('hi')}>
+                onPress={() => navigation.navigate('router')}>
                 <Text
                   style={{
                     marginLeft: 15,
@@ -372,7 +372,7 @@ export default function Teams({navigation}) {
                   marginLeft: 10,
                   marginTop: 20,
                 }}
-                onPress={() => console.log('hi')}>
+                onPress={() => navigation.navigate('router')}>
                 <Text
                   style={{
                     marginLeft: 15,
@@ -393,14 +393,6 @@ export default function Teams({navigation}) {
         </View>
       </ScrollView>
     );
-  };
-
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="TeamsMain" component={TeamsMain} />
-      <Stack.Screen name="Profile" component={Profile} />
-    </Stack.Navigator>
-  );
 }
 
 const styles = StyleSheet.create({

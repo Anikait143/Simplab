@@ -14,6 +14,7 @@ import arrowUp from './TeamAssets/arrowUp.png';
 
 const DATA = [
   {
+    key: '1',
     title: 'Assigned',
     data: [
       {
@@ -26,6 +27,7 @@ const DATA = [
     ],
   },
   {
+    key: '2',
     title: 'Previous',
     data: [
       {

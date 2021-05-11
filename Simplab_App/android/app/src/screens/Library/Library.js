@@ -3,6 +3,7 @@ import { StyleSheet,ScrollView, FlatList, View,ImageBackground ,Text,TextInput,I
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import Lib from '../Home/images/Library.png';
 import pattern from '../alerts/AlertsAssets/intersect2.png'
+import back from '../Home/images/Vector.png';
 
 
 export default function Library({navigation}) {
@@ -12,10 +13,39 @@ export default function Library({navigation}) {
       <View style={styles.container}>
         <ImageBackground source={bckImage} style={styles.imageBackground}>
           <View style={{width: '100%', marginBottom: 20}}>
-            <Image
-              style={{marginBottom: 20, marginTop: 49, alignSelf: 'center', width: 85, height: 25}}
-              source={Lib}
-            />
+            <View style={{flexDirection:'row',alignItems:'stretch'}}>
+            <TouchableOpacity
+                style={{
+                    borderRadius: 18,
+                    height: 36,
+                    width: 36,
+                    alignSelf: 'flex-start',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    marginRight: 10,
+                    marginLeft: 20,
+                    marginTop: 45,
+                }}
+                onPress={() => navigation.navigate('Home')}>
+                <View style={{width: 40, height: 40, borderRadius: 80, marginTop: 0}}>
+                    <Image source={back} style={{ zIndex: 1, height:25, width:25, marginTop: 2, marginLeft: 8}} />
+                </View>
+            </TouchableOpacity>
+                <Text 
+                  style={{
+                    color: '#F37A27',
+                    fontSize: 28,
+                    marginTop: 35,
+                    marginLeft: 50,
+                    alignSelf: 'center',
+                    textAlignVertical: 'center',
+                    fontWeight: '700',
+                    height: 46,
+                    borderRadius: 6,
+                    paddingLeft: 20,
+                  }}
+                >Library</Text>
+            </View>
             <TouchableOpacity
                 style={{
                     backgroundColor: '#1E2326',

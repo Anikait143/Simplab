@@ -8,12 +8,9 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import bckImage from './ExperimentsAssets/bckImage.png';
-import Intersect from './ExperimentsAssets/Intersect.png';
-import Intersect2 from './ExperimentsAssets/intersect2.png';
-import experimentsText from './ExperimentsAssets/expText.png';
-import arrowDown from './ExperimentsAssets/arrowDown.png';
-import arrowUp from './ExperimentsAssets/arrowUp.png';
+import bckImage from './TeamAssets/bckImg.png';
+import arrowDown from './TeamAssets/arrowDown.png';
+import arrowUp from './TeamAssets/arrowUp.png';
 
 const DATA = [
   {
@@ -23,23 +20,26 @@ const DATA = [
         expNo: 5,
         expHeading: 'Mag Field',
         dueDate: "19 Apr'21 23:59",
+        submissions: '24/30',
         isComplete: false,
       },
     ],
   },
   {
-    title: 'Completed',
+    title: 'Previous',
     data: [
       {
         expNo: 4,
         expHeading: 'Mag Field',
         dueDate: "19 Apr'21 23:59",
+        submissions: '24/30',
         isComplete: true,
       },
       {
         expNo: 4,
         expHeading: 'Mag Field',
         dueDate: "19 Apr'21 23:59",
+        submissions: '24/30',
         isComplete: true,
       },
     ],
@@ -50,18 +50,14 @@ const Item = ({item}) => (
   <View style={styles.item}>
     <Text style={styles.expNo}>Experiment {item.expNo}</Text>
     <Text style={styles.expHeading}>{item.expHeading}</Text>
-    <Image
-      style={{top: 10, left: 0, alignSelf: 'flex-start'}}
-      source={Intersect}
-    />
-    <Image style={{top: -55, alignSelf: 'flex-end'}} source={Intersect2} />
+    <Text style={styles.submissions}>Submissions: {item.submissions}</Text>
     <Text style={item.isComplete ? styles.dueDate : styles.dueDateOrange}>
-      {item.dueDate}
+      Due {item.dueDate}
     </Text>
   </View>
 );
 
-export default function Experiments({navigation}) {
+export default function Settings({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
 
@@ -69,10 +65,6 @@ export default function Experiments({navigation}) {
     <View style={styles.container}>
       <ImageBackground source={bckImage} style={styles.imageBackground}>
         <View style={{width: '100%'}}>
-          <Image
-            style={{marginBottom: 37, marginTop: 49, alignSelf: 'center'}}
-            source={experimentsText}
-          />
           <SectionList
             sections={DATA}
             keyExtractor={(item, index) => item + index}
@@ -131,7 +123,7 @@ const styles = StyleSheet.create({
     width: 30,
   },
   headertext: {
-    color: '#8e8e8e',
+    color: '#f37a27',
     fontSize: 12,
     fontFamily: 'Montserrat',
     fontWeight: 'bold',
@@ -145,6 +137,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   item: {
+    padding: 10,
     height: 90,
     margin: 6,
     backgroundColor: '#1E2326',
@@ -156,21 +149,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Montserrat',
     fontWeight: '600',
-    position: 'absolute',
-    top: 12,
-    left: 50,
   },
   expHeading: {
-    color: '#CFCFCF',
+    color: '#cdcdcd',
     fontSize: 15,
     fontFamily: 'Montserrat',
     fontWeight: '600',
-    position: 'absolute',
-    top: 34,
-    left: 50,
   },
   dueDateOrange: {
-    top: -80,
+    position: 'absolute',
+    bottom: 8,
     color: '#F27A27',
     paddingRight: 12,
     fontSize: 11,
@@ -179,12 +167,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   dueDate: {
-    top: -80,
+    position: 'absolute',
+    bottom: 8,
     color: '#A1A1A1',
     paddingRight: 12,
     fontSize: 11,
     fontFamily: 'Montserrat',
     fontWeight: '600',
     alignSelf: 'flex-end',
+  },
+  submissions: {
+    paddingTop: 15,
+    color: '#c1c1c1',
+    fontSize: 11,
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
   },
 });

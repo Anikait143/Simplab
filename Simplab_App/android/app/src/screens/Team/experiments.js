@@ -11,6 +11,8 @@ import {
 import bckImage from './TeamAssets/bckImg.png';
 import arrowDown from './TeamAssets/arrowDown.png';
 import arrowUp from './TeamAssets/arrowUp.png';
+import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const DATA = [
   {
@@ -59,12 +61,15 @@ const Item = ({item}) => (
   </View>
 );
 
-export default function Settings({navigation}) {
+export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
 
-  return (
-    <View style={styles.container}>
+  const Stack = createStackNavigator();
+
+  const AllExperiments =()=>{
+    return (
+      <View style={styles.container}>
       <ImageBackground source={bckImage} style={styles.imageBackground}>
         <View style={{width: '100%'}}>
           <SectionList
@@ -76,7 +81,10 @@ export default function Settings({navigation}) {
                   <Item item={item} />
                 ) : null
               ) : isAssignedOpen ? (
-                <Item item={item} />
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ExperimentDetail')}>
+                  <Item item={item} />
+                </TouchableOpacity>
               ) : null;
             }}
             renderSectionHeader={({section: {title}}) => {
@@ -107,6 +115,15 @@ export default function Settings({navigation}) {
         </View>
       </ImageBackground>
     </View>
+    );
+  }
+
+
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="allexperiments" component={AllExperiments}/>
+    </Stack.Navigator>
+    
   );
 }
 

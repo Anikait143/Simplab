@@ -5,6 +5,7 @@ import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import addpic from '../Home/images/addpic.png';
 import profpic from '../Home/images/profpic.png';
 import simpText from '../Home/images/SIMPLAB-white.png';
+import edit from '../Home/images/Group-45.png';
 import back from '../Home/images/Vector.png';
 import * as ImagePicker from "react-native-image-picker" 
 
@@ -149,6 +150,19 @@ export default function Profile({navigation}) {
                             value={contact}
                         />
                     </View>
+                    <TouchableOpacity
+                      style={{
+                        height: 50,
+                        width: 50,
+                        borderRadius: 25,
+                        backgroundColor: '#F37A27',
+                        alignSelf: 'flex-end',
+                        marginRight: 25,
+                        marginTop: 25
+                      }}
+                      onPress={() => navigation.navigate('settings')}>
+                    <Image source={edit} style={{ height:30, width:30, alignSelf:'center',marginTop: 10}} />
+                    </TouchableOpacity>
                     </View>
                     </View>
                 </ImageBackground>

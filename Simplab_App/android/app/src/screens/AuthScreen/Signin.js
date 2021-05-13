@@ -16,7 +16,7 @@ import img from './Login/Orimage.png';
 import {Context as AuthContext} from '../../context/AuthContext';
 
 export default function Signin({navigation}) {
-  const [email, onChangeEmail] = React.useState('');
+  const [username, onChangeusername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const {state, signin} = useContext(AuthContext);
 
@@ -38,15 +38,16 @@ export default function Signin({navigation}) {
           }}>
           <TextInput
             style={styles.Textinput}
-            label="Email"
-            onChangeText={text => onChangeEmail(text)}
-            value={email}
+            label="Username"
+            onChangeText={text => onChangeusername(text)}
+            value={username}
             placeholder="Username"
             placeholderTextColor="#9C9C9C"
           />
 
           <TextInput
             style={styles.Textinput}
+            secureTextEntry={true}
             label="Password"
             onChangeText={text => onChangePassword(text)}
             value={password}
@@ -57,7 +58,7 @@ export default function Signin({navigation}) {
           <Button
             color="#F37A27"
             title="Sign In"
-            onPress={() => signin({email, password})}
+            onPress={() => signin({username, password})}
           />
 
           <TouchableOpacity

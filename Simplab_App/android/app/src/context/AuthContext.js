@@ -37,17 +37,33 @@ const signup = dispatch => {
 };
 
 const signin = dispatch => {
-  return ({email, password}) => {
+  return ({username, password}) => {
     // Do some API Request here
     console.log('Signin');
-    console.log(email)
-    dispatch({
-      type: 'signin',
-      payload: {
-        token: 'some access token here',
-        email,
-      },
-    });
+
+    axios
+      .get(`https://simplab-api.herokuapp.com/api/auth/${username}/${password}`)
+      .then(res => {
+        console.log(res.data);
+        dispatch({
+          type: 'signin',
+          payload: {
+            token: res.data.user,
+            username,
+            email: '',
+            profile_image: null,
+            organization: null,
+            contact: null,
+            teams: [],
+          },
+        });
+        return 1;
+      })
+      .catch(e => {
+        console.log(e);
+        alert('Some error occurred');
+        return 0;
+      });
   };
 };
 

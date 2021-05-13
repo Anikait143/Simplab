@@ -1,4 +1,5 @@
 import createDataContext from './createDataContext';
+import axios from 'axios';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -16,9 +17,22 @@ const authReducer = (state, action) => {
 };
 
 const signup = dispatch => {
-  return ({email, password}) => {
-    console.log('Signup');
-    console.log(email, password);
+  return ({Username,email, password}) => {
+    //console.log('Signup');
+    //console.log(email, password);
+    axios.post('https://simplab-api.herokuapp.com/api/users/', {
+      username: Username,
+      password: password,
+      email: email
+    })
+    .then(function (response) {
+
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert(error);
+    });
   };
 };
 

@@ -1,4 +1,5 @@
 import React, {useContext, useState} from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   Button,
@@ -26,6 +27,12 @@ export default function Signup({navigation}) {
   const [confPassword, onChangeconfPassword] = React.useState('');
 
   const {state, signup} = useContext(AuthContext);
+
+  function register(){
+      signup({Username, email, password});
+      navigation.navigate('Signin')
+      alert("User registered successfully.");
+  }
 
   return (
     <View style={styles.container}>
@@ -64,6 +71,7 @@ export default function Signup({navigation}) {
           <View style={styles.Textinputcontainer}>
             <Image source={Passwordicon} style={styles.texticon} />
             <TextInput
+              secureTextEntry={true}
               style={styles.Textinput}
               label="Password"
               onChangeText={text => onChangePassword(text)}
@@ -76,6 +84,7 @@ export default function Signup({navigation}) {
           <View style={styles.Textinputcontainer}>
             <Image source={confirmPasswordicon} style={styles.texticon} />
             <TextInput
+              secureTextEntry={true}
               style={styles.Textinput}
               label="confPassword"
               onChangeText={text => onChangeconfPassword(text)}
@@ -87,7 +96,9 @@ export default function Signup({navigation}) {
 
           <TouchableOpacity
             style={{marginTop: 15}}
-            onPress={() => signup({email, password})}>
+            onPress={() => {
+              (password==confPassword) ? register() : alert("Password did not match: Please try again...");
+            }}>
             <Image source={next} />
           </TouchableOpacity>
         </View>

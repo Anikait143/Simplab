@@ -29,7 +29,7 @@ export default function Teams({navigation}) {
   const [ShowJoinTeam, setShowJoinTeam] = useState(false);
   const [Code, onChangeCode] = React.useState('');
   const [Title, onChangeTitle] = React.useState('');
-  const Stack = createStackNavigator();
+  const [List, onChangeList] = React.useState('');
 
     return (
       <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>

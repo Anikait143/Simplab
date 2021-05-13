@@ -13,6 +13,7 @@ import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';
 import Lib from '../Library/Library'
 import router from '../Team/router'
+import settings from '../Settings/Settings'
 
 const Tab = createBottomTabNavigator();
 
@@ -117,6 +118,7 @@ export default function Home() {
         <RootStack.Screen name="Profile" component={Profile} />
         <RootStack.Screen name="Library" component={Lib} />
         <RootStack.Screen name="router" component={router} />
+        <RootStack.Screen name="settings" component={settings} />
       </RootStack.Navigator>
   );
 }

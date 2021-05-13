@@ -41,7 +41,7 @@ export default function Signin({navigation}) {
             label="Email"
             onChangeText={text => onChangeEmail(text)}
             value={email}
-            placeholder="Email"
+            placeholder="Username"
             placeholderTextColor="#9C9C9C"
           />
 

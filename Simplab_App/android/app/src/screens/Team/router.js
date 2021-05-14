@@ -32,7 +32,9 @@ export default function Router({navigation}) {
       label="Class 12 phy"
       values={['Chats', 'Experiments', 'Files']}
       selectedValue={tabOpen}
-      setSelectedValue={setTabOpen}>
+      setSelectedValue={setTabOpen}
+      navigator={navigation}
+      >
       <Chats />
       <Experiments />
       <Files />
@@ -40,11 +42,11 @@ export default function Router({navigation}) {
   );
 }
 
-const NavBar = ({label, children, values, selectedValue, setSelectedValue}) => (
+const NavBar = ({label, children, values, selectedValue, setSelectedValue,navigator}) => (
   <View style={styles.container}>
     <ImageBackground source={bckImage} style={styles.imageBackground}>
       <View style={[styles.row, {paddingTop: 40, paddingBottom: 5}]}>
-        <TouchableOpacity style={{left: -110}} onPress={() => {}}>
+        <TouchableOpacity style={{left: -110}} onPress={() => navigator.navigate('Home')}>
           <Image source={back} />
         </TouchableOpacity>
         <Text style={styles.label}>{label}</Text>

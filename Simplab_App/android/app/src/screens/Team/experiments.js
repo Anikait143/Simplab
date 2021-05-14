@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
+import {Touchable} from 'react-native';
 import {
   StyleSheet,
   SectionList,
   View,
-  ImageBackground,
   Text,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import bckImage from './TeamAssets/bckImg.png';
+import add from './TeamAssets/add.png';
 import arrowDown from './TeamAssets/arrowDown.png';
 import arrowUp from './TeamAssets/arrowUp.png';
 import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
@@ -65,55 +65,48 @@ export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
 
-  const Stack = createStackNavigator();
-
-  const AllExperiments =()=>{
-    return (
-      <View style={styles.container}>
-      <ImageBackground source={bckImage} style={styles.imageBackground}>
-        <View style={{width: '100%'}}>
-          <SectionList
-            sections={DATA}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({item}) => {
-              return item.isComplete ? (
-                isCompletedOpen ? (
-                  <Item item={item} />
-                ) : null
-              ) : isAssignedOpen ? (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('ExperimentDetail')}>
-                  <Item item={item} />
-                </TouchableOpacity>
-              ) : null;
-            }}
-            renderSectionHeader={({section: {title}}) => {
-              const imgsrc =
-                title === 'Assigned'
-                  ? isAssignedOpen
-                    ? arrowUp
-                    : arrowDown
-                  : isCompletedOpen
-                  ? arrowUp
-                  : arrowDown;
-              return (
-                <View>
-                  <TouchableOpacity
-                    style={styles.headericon}
-                    onPress={() => {
-                      title === 'Assigned'
-                        ? onChangeAssignedOpen(!isAssignedOpen)
-                        : onChangeCompletedOpen(!isCompletedOpen);
-                    }}>
-                    <Image style={{top: 8}} source={imgsrc} />
-                  </TouchableOpacity>
-                  <Text style={styles.headertext}>{title}</Text>
-                </View>
-              );
-            }}
-          />
-        </View>
-      </ImageBackground>
+  return (
+    <View style={styles.container}>
+      <SectionList
+        sections={DATA}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => {
+          return item.isComplete ? (
+            isCompletedOpen ? (
+              <Item item={item} />
+            ) : null
+          ) : isAssignedOpen ? (
+            <Item item={item} />
+          ) : null;
+        }}
+        renderSectionHeader={({section: {title}}) => {
+          const imgsrc =
+            title === 'Assigned'
+              ? isAssignedOpen
+                ? arrowUp
+                : arrowDown
+              : isCompletedOpen
+              ? arrowUp
+              : arrowDown;
+          return (
+            <View>
+              <TouchableOpacity
+                style={styles.headericon}
+                onPress={() => {
+                  title === 'Assigned'
+                    ? onChangeAssignedOpen(!isAssignedOpen)
+                    : onChangeCompletedOpen(!isCompletedOpen);
+                }}>
+                <Image style={{top: 8}} source={imgsrc} />
+              </TouchableOpacity>
+              <Text style={styles.headertext}>{title}</Text>
+            </View>
+          );
+        }}
+      />
+      <TouchableOpacity style={styles.addBtn}>
+        <Image source={add} />
+      </TouchableOpacity>
     </View>
     );
   }
@@ -130,6 +123,7 @@ export default function Experiments({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     color: '#fff',
     backgroundColor: '#272B2E',
   },
@@ -150,10 +144,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 26,
     textAlignVertical: 'center',
-  },
-  imageBackground: {
-    flex: 1,
-    resizeMode: 'cover',
   },
   item: {
     padding: 10,
@@ -201,5 +191,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: 'Montserrat',
     fontWeight: '600',
+  },
+  addBtn: {
+    position: 'absolute',
+    bottom: 40,
+    backgroundColor: '#f37a27',
+    borderRadius: 40,
+    padding: 16,
+    right: 20,
   },
 });

@@ -21,6 +21,7 @@ import {Context as AuthContext} from '../../context/AuthContext';
 export default function Settings({navigation}) {
   const [contact, onChangeContact] = React.useState('');
   const [email, onChangeEmail] = React.useState('');
+  const [organization, onChangeOrganization] = React.useState('');
   const [currPassword, onChangeCurrPassword] = React.useState('');
   const [newPassword, onChangeNewPassword] = React.useState('');
   const [confPassword, onChangeconfPassword] = React.useState('');
@@ -51,7 +52,18 @@ export default function Settings({navigation}) {
                 placeholderTextColor="#939393"
               />
             </View>
-
+            <Text style={styles.labeltext}>Organization</Text>
+            <View style={styles.Textinputcontainer}>
+              <Image source={edit} style={styles.texticon} />
+              <TextInput
+                style={styles.Textinput}
+                label="Organization"
+                onChangeText={text => onChangeOrganization(text)}
+                value={organization}
+                placeholder="Enter your Organization"
+                placeholderTextColor="#939393"
+              />
+            </View>
             <Text style={styles.labeltext}>Contact</Text>
             <View style={styles.Textinputcontainer}>
               <Image source={edit} style={styles.texticon} />

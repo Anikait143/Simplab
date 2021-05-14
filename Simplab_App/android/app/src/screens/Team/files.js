@@ -48,11 +48,7 @@ const Tile = ({item}) => (
 export default function Chats({navigation}) {
   return (
     <View style={styles.container}>
-      <ImageBackground source={bckImage} style={styles.imageBackground}>
-        <View style={{width: '100%'}}>
-          <FlatList data={DATA} renderItem={({item}) => <Tile item={item} />} />
-        </View>
-      </ImageBackground>
+      <FlatList data={DATA} renderItem={({item}) => <Tile item={item} />} />
     </View>
   );
 }
@@ -60,14 +56,9 @@ export default function Chats({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     color: '#fff',
     backgroundColor: '#272B2E',
-  },
-  imageBackground: {
-    flex: 1,
-    resizeMode: 'cover',
-    //justifyContent: 'space-around',
-    alignItems: 'center',
   },
   item: {
     padding: 15,

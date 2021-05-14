@@ -11,9 +11,10 @@ import Teams from '../Teams/Teams';
 import alerts from '../alerts/alerts';
 import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';
-import Lib from '../Library/Library'
-import router from '../Team/router'
-import ExperimentDetail from '../ExperimentDetail/ExperimentDetail'
+import Lib from '../Library/Library';
+import router from '../Team/router';
+import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
+import settings from '../Settings/Settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -113,13 +114,13 @@ const RootStack = createStackNavigator();
 
 export default function Home() {
   return (
-      <RootStack.Navigator screenOptions={{headerShown: false}}>
-        <RootStack.Screen name="Home" component={HomeTabs} />
-        <RootStack.Screen name="Profile" component={Profile} />
-        <RootStack.Screen name="Library" component={Lib} />
-        <RootStack.Screen name="router" component={router} />
+    <RootStack.Navigator screenOptions={{headerShown: false}}>
+      <RootStack.Screen name="Home" component={HomeTabs} />
+      <RootStack.Screen name="Profile" component={Profile} />
+      <RootStack.Screen name="Library" component={Lib} />
+      <RootStack.Screen name="router" component={router} />
       <RootStack.Screen name="ExperimentDetail" component={ExperimentDetail} />
-
-      </RootStack.Navigator>
+      <RootStack.Screen name="settings" component={settings} />
+    </RootStack.Navigator>
   );
 }

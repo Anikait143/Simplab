@@ -10,6 +10,11 @@ const authReducer = (state, action) => {
       return {
         token: action.payload.token,
         email: action.payload.email,
+        username: action.payload.username,
+        profile_image: action.payload.profile_image,
+        organization: action.payload.organization,
+        contact: action.payload.contact,
+        teams: action.payload.teams,
       };
     default:
       return state;
@@ -17,7 +22,7 @@ const authReducer = (state, action) => {
 };
 
 const signup = dispatch => {
-  return ({Username,email, password}) => {
+  return ({Username,email, password,navigation}) => {
     //console.log('Signup');
     //console.log(email, password);
     axios.post('https://simplab-api.herokuapp.com/api/users/', {
@@ -26,8 +31,8 @@ const signup = dispatch => {
       email: email
     })
     .then(function (response) {
-
       console.log(response.data);
+      alert("User registered successfully.");
     })
     .catch(function (error) {
       console.log(error);
@@ -49,19 +54,19 @@ const signin = dispatch => {
           type: 'signin',
           payload: {
             token: res.data.user,
-            username,
-            email: '',
-            profile_image: null,
-            organization: null,
-            contact: null,
-            teams: [],
+            username: res.data.username,
+            email: res.data.email,
+            profile_image: res.data.profile_image,
+            organization: res.data.organization,
+            contact: res.data.contact,
+            teams: res.data.teams,
           },
         });
         return 1;
       })
       .catch(e => {
         console.log(e);
-        alert('Some error occurred');
+        alert('Invalid username or password occurred');
         return 0;
       });
   };

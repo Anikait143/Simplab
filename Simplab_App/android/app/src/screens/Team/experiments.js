@@ -109,15 +109,7 @@ export default function Experiments({navigation}) {
       </TouchableOpacity>
     </View>
     );
-  }
-
-
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="allexperiments" component={AllExperiments}/>
-    </Stack.Navigator>
-    
-  );
+  
 }
 
 const styles = StyleSheet.create({

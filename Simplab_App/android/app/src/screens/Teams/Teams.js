@@ -29,7 +29,7 @@ export default function Teams({navigation}) {
   const [ShowJoinTeam, setShowJoinTeam] = useState(false);
   const [Code, onChangeCode] = React.useState('');
   const [Title, onChangeTitle] = React.useState('');
-  const [List, onChangeList] = React.useState('');
+  const Stack = createStackNavigator();
 
     return (
       <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
@@ -150,7 +150,7 @@ export default function Teams({navigation}) {
                   </View>
                 </TouchableOpacity>
               </View>
-              {ShowJoinTeam ? (
+              {ShowCreateTeam ? (
                 <View
                   style={{
                     backgroundColor: '#3C3C3C',
@@ -213,7 +213,7 @@ export default function Teams({navigation}) {
                         //textAlignVertical: 'center',
                         justifyContent: 'center',
                       }}
-                      onPress={() => setShowJoinTeam(false)}>
+                      onPress={() => setShowCreateTeam(false)}>
                       <Text
                         style={{
                           //textAlignVertical: 'center',
@@ -227,7 +227,7 @@ export default function Teams({navigation}) {
                   </View>
                 </View>
               ) : null}
-              {ShowCreateTeam ? (
+              {ShowJoinTeam ? (
                 <View
                   style={{
                     backgroundColor: '#3C3C3C',
@@ -290,7 +290,7 @@ export default function Teams({navigation}) {
                         //textAlignVertical: 'center',
                         justifyContent: 'center',
                       }}
-                      onPress={() => setShowCreateTeam(false)}>
+                      onPress={() => setShowJoinTeam(false)}>
                       <Text
                         style={{
                           //textAlignVertical: 'center',

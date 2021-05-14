@@ -11,7 +11,7 @@ import Teams from '../Teams/Teams';
 import alerts from '../alerts/alerts';
 import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';
-import Lib from '../Library/Library';
+import Lib from '../Library/LibraryMain';
 import router from '../Team/router';
 import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
 import settings from '../Settings/Settings';

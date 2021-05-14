@@ -41,7 +41,7 @@ export default function Teams({navigation}) {
   useEffect(() => {
     team_list();
     //console.log("hi",List);
-  }, [ShowCreateTeam]);
+  }, [ShowCreateTeam, ShowJoinTeam]);
 
   async function team_list() {
     return await axios
@@ -260,7 +260,18 @@ export default function Teams({navigation}) {
                       //textAlignVertical: 'center',
                       justifyContent: 'center',
                     }}
-                    onPress={() => console.log('hi')}>
+                    onPress={() => {
+                      //console.log('hi')
+                      axios.put(`https://simplab-api.herokuapp.com/api/join-team/${Code}/${state.token}`, )
+                      .then(res => {
+                        //console.log(res.data);
+                        setShowJoinTeam(false);
+                        navigation.navigate('router',{team_id: Code});
+                      })
+                      .catch(e => {
+                        console.log(e);
+                      });
+                    }}>
                     <Text
                       style={{
                         //textAlignVertical: 'center',

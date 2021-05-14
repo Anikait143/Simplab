@@ -28,10 +28,25 @@ export default function Signup({navigation}) {
 
   const {state, signup} = useContext(AuthContext);
 
+  function validate(text){
+    //console.log(text);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(text) === false) {
+      alert("Invalid Email or Password");
+      //this.setState({ email: text })
+      //return false;
+    }
+    else {
+      //this.setState({ email: text });
+      register();
+      //return true;
+      //console.log("Email is Correct");
+    }
+  }
+
   function register(){
       signup({Username, email, password});
       navigation.navigate('Signin')
-      alert("User registered successfully.");
   }
 
   return (
@@ -97,7 +112,7 @@ export default function Signup({navigation}) {
           <TouchableOpacity
             style={{marginTop: 15}}
             onPress={() => {
-              (password==confPassword) ? register() : alert("Password did not match: Please try again...");
+              (password==confPassword) ? validate(email) : alert("Password did not match: Please try again...");
             }}>
             <Image source={next} />
           </TouchableOpacity>

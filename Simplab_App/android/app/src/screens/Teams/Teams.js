@@ -2,7 +2,6 @@ import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
   ScrollView,
-  Button,
   View,
   ImageBackground,
   Text,
@@ -10,7 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import Menu, {MenuItem} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import SimplabText from '../Home/images/SIMPLAB.png';
 import dots from '../Home/images/dots.png';
@@ -19,10 +18,6 @@ import lib from '../Home/images/lib.png';
 import create from '../Home/images/create.png';
 import hash from '../Home/images/hash.png';
 import pattern from '../alerts/AlertsAssets/intersect2.png';
-import Profile from '../Profile/Profile';
-import Library from '../Library/Library';
-import router from '../Team/router';
-import {createStackNavigator} from '@react-navigation/stack';
 import {Context as AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
 
@@ -34,49 +29,18 @@ export default function Teams({navigation}) {
   const [List, setList] = React.useState([]);
   const {state} = useContext(AuthContext);
 
-  //console.log("This is a state",state);
   let _menu = null;
-  //let team_name;
 
   useEffect(() => {
     team_list();
-    //console.log("hi",List);
   }, [ShowCreateTeam, ShowJoinTeam]);
 
   async function team_list() {
     return await axios
       .get(`https://simplab-api.herokuapp.com/api/teams/${state.token}`)
       .then(async res => {
-        //console.log('non admin teams', res.data);
-        /*res.data.map((element) => {
-          setList([...List, element.team_name]);
-        });*/
         const dat = res.data;
         setList(res.data);
-        //const team_name=res.data.team_name;
-        //console.log("hello",res.data);
-        await axios
-          .get(
-            `https://simplab-api.herokuapp.com/api/admin-teams/${state.token}`,
-          )
-          .then(res => {
-            //console.log('admin teams', res.data);
-            /*res.data.map((element) => {
-            setList([...List, element.team_name]);
-          });*/
-            //console.log(res.data);
-            setList(oldArray => {
-              //console.log('purani waali', oldArray);
-              const arra = [...oldArray, ...res.data];
-              //console.log('combined', arra);
-              return arra;
-            });
-            //const team_name=res.data.team_name;
-            //console.log("hello",res.data);
-          })
-          .catch(e => {
-            console.log(e);
-          });
       });
   }
 
@@ -97,12 +61,6 @@ export default function Teams({navigation}) {
       subtitle: 'example subtitle 3',
     },
   ];
-
-  const list = () => {
-    //team_list();
-    //console.log("hell",List);
-    return;
-  };
 
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
@@ -262,15 +220,18 @@ export default function Teams({navigation}) {
                     }}
                     onPress={() => {
                       //console.log('hi')
-                      axios.put(`https://simplab-api.herokuapp.com/api/join-team/${Code}/${state.token}`, )
-                      .then(res => {
-                        //console.log(res.data);
-                        setShowJoinTeam(false);
-                        navigation.navigate('router',{team_id: Code});
-                      })
-                      .catch(e => {
-                        console.log(e);
-                      });
+                      axios
+                        .put(
+                          `https://simplab-api.herokuapp.com/api/join-team/${Code}/${state.token}`,
+                        )
+                        .then(res => {
+                          //console.log(res.data);
+                          setShowJoinTeam(false);
+                          navigation.navigate('router', {team_id: Code});
+                        })
+                        .catch(e => {
+                          console.log(e);
+                        });
                     }}>
                     <Text
                       style={{
@@ -350,21 +311,27 @@ export default function Teams({navigation}) {
                     }}
                     onPress={() => {
                       //console.log('hi');
-                      axios.post('https://simplab-api.herokuapp.com/api/create-team/', {
-                        team_name: Title,
-                        admin: state.token,
-                      })
-                      .then(function (response) {
-                        console.log("Team registered");
-                        setShowCreateTeam(false);
-                        navigation.navigate('router',{team_id: response.data});
-                        //alert("User registered successfully.");
-                      })
-                      .catch(function (error) {
-                        console.log(error);
-                        //alert(error);
-                      });
-                      }}>
+                      axios
+                        .post(
+                          'https://simplab-api.herokuapp.com/api/create-team/',
+                          {
+                            team_name: Title,
+                            admin: state.token,
+                          },
+                        )
+                        .then(function (response) {
+                          console.log('Team registered');
+                          setShowCreateTeam(false);
+                          navigation.navigate('router', {
+                            team_id: response.data,
+                          });
+                          //alert("User registered successfully.");
+                        })
+                        .catch(function (error) {
+                          console.log(error);
+                          //alert(error);
+                        });
+                    }}>
                     <Text
                       style={{
                         //textAlignVertical: 'center',
@@ -387,13 +354,11 @@ export default function Teams({navigation}) {
                       marginTop: 15,
                       alignSelf: 'flex-end',
                       alignItems: 'center',
-                      //textAlignVertical: 'center',
                       justifyContent: 'center',
                     }}
                     onPress={() => setShowCreateTeam(false)}>
                     <Text
                       style={{
-                        //textAlignVertical: 'center',
                         fontWeight: '700',
                         fontSize: 16,
                         color: '#FFFFFF',
@@ -406,37 +371,37 @@ export default function Teams({navigation}) {
             ) : null}
             <View>
               {List.map(element => {
-                //console.log(element.team_name);
                 return (
-                <TouchableOpacity
-                style={{
-                  backgroundColor: '#1E2326',
-                  borderRadius: 12,
-                  height: 91,
-                  alignSelf: 'auto',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginRight: 10,
-                  marginLeft: 10,
-                  marginTop: 20,
-                }}
-                onPress={() => navigation.navigate('router')}>
-                <Text
-                  style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                  }}>
-                  {element.team_name}
-                </Text>
-                <Image
-                  source={pattern}
-                  style={{height: 90, width: 100, alignSelf: 'stretch'}}
-                />
-              </TouchableOpacity>
-                )
+                  <TouchableOpacity
+                  key={`${element.id}`}
+                    style={{
+                      backgroundColor: '#1E2326',
+                      borderRadius: 12,
+                      height: 91,
+                      alignSelf: 'auto',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginRight: 10,
+                      marginLeft: 10,
+                      marginTop: 20,
+                    }}
+                    onPress={() => navigation.navigate('router')}>
+                    <Text
+                      style={{
+                        marginLeft: 15,
+                        marginTop: 10,
+                        fontWeight: '700',
+                        fontSize: 20,
+                        color: '#FFFFFF',
+                      }}>
+                      {element.team_name}
+                    </Text>
+                    <Image
+                      source={pattern}
+                      style={{height: 90, width: 100, alignSelf: 'stretch'}}
+                    />
+                  </TouchableOpacity>
+                );
               })}
             </View>
           </View>

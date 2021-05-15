@@ -1,13 +1,38 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import { StyleSheet,ScrollView, FlatList, View,ImageBackground ,Text,TextInput,Image,TouchableOpacity,Dimensions} from 'react-native';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import Lib from '../Home/images/Library.png';
 import pattern from '../alerts/AlertsAssets/intersect2.png'
 import back from '../Home/images/Vector.png';
+import axios from 'axios'
 
 
 export default function Library({navigation}) {
     let {width, height} = Dimensions.get('window')
+    const [Data,onChange]=React.useState([]);
+
+
+    useEffect(() => {
+      getData();
+    });
+    const getData=()=>{
+    axios
+    .get(`https://simplab-api.herokuapp.com/api/simulations/`)
+    .then(res => {
+      const data=res.data;
+      onChange(data);
+      return 1;
+    })
+    .catch(e => {
+      console.log(e);
+      alert('Some error occurred');
+      return 0;
+    });
+  }
+
+
+
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
@@ -36,7 +61,7 @@ export default function Library({navigation}) {
                     color: '#F37A27',
                     fontSize: 28,
                     marginTop: 35,
-                    marginLeft: 50,
+                    marginLeft: 70,
                     alignSelf: 'center',
                     textAlignVertical: 'center',
                     fontWeight: '700',
@@ -46,7 +71,12 @@ export default function Library({navigation}) {
                   }}
                 >Library</Text>
             </View>
-            <TouchableOpacity
+
+
+            {Data.map((item,key) => {
+              return (
+                <TouchableOpacity
+                key={key}
                 style={{
                     backgroundColor: '#1E2326',
                     borderRadius: 12,
@@ -58,7 +88,8 @@ export default function Library({navigation}) {
                     marginLeft: 10,
                     marginTop: 20,
                 }}
-                onPress={() => console.log('hi')}>
+                onPress={() =>{navigation.navigate('Experiment',{Id:item.id})}}
+               >
                 <Text
                 style={{
                     marginLeft: 15,
@@ -69,91 +100,15 @@ export default function Library({navigation}) {
                     color: '#FFFFFF',
                     textAlignVertical: 'center',
                 }}>
-                    Magnetic Lines in a Coil
+                   {item.exp_name}
                 </Text>
                 <Image source={pattern} style={{ height:90,width:100, marginLeft:-width/6,alignSelf: 'stretch' }} />
             </TouchableOpacity>
-            <TouchableOpacity
-                style={{
-                    backgroundColor: '#1E2326',
-                    borderRadius: 12,
-                    height: 91,
-                    alignSelf: 'auto',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 20,
-                }}
-                onPress={() => console.log('hi')}>
-                <Text
-                style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    zIndex: 1,
-                    color: '#FFFFFF',
-                    textAlignVertical: 'center',
-                }}>
-                    Electromagnetic Induction
-                </Text>
-                <Image source={pattern} style={{ height:90,width:100, marginLeft:-width/6,alignSelf: 'stretch' }} />
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={{
-                    backgroundColor: '#1E2326',
-                    borderRadius: 12,
-                    height: 91,
-                    alignSelf: 'auto',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 20,
-                }}
-                onPress={() => console.log('hi')}>
-                <Text
-                style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    zIndex: 1,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                    textAlignVertical: 'center',
-                }}>
-                    Travelling Microscope
-                </Text>
-                <Image source={pattern} style={{ height:90,width:100, marginLeft:-width/6,alignSelf: 'stretch' }} />
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={{
-                    backgroundColor: '#1E2326',
-                    borderRadius: 12,
-                    height: 91,
-                    alignSelf: 'auto',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 20,
-                }}
-                onPress={() => console.log('hi')}>
-                <Text
-                style={{
-                    marginLeft: 15,
-                    marginTop: 10,
-                    zIndex: 1,
-                    fontWeight: '700',
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                    textAlignVertical: 'center',
-                }}>
-                    Stoke’s Law
-                </Text>
-                <Image source={pattern} style={{ height:90,width:100, marginLeft:-width/6,alignSelf: 'stretch' }} />
-            </TouchableOpacity>
+              )})}
+
+            
+
+            
           </View>
         </ImageBackground>
       </View>

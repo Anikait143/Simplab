@@ -11,6 +11,8 @@ import {
 import add from './TeamAssets/add.png';
 import arrowDown from './TeamAssets/arrowDown.png';
 import arrowUp from './TeamAssets/arrowUp.png';
+import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const DATA = [
   {
@@ -59,7 +61,7 @@ const Item = ({item}) => (
   </View>
 );
 
-export default function Settings({navigation}) {
+export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
 
@@ -106,7 +108,8 @@ export default function Settings({navigation}) {
         <Image source={add} />
       </TouchableOpacity>
     </View>
-  );
+    );
+  
 }
 
 const styles = StyleSheet.create({

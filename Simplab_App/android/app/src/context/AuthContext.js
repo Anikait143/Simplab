@@ -25,12 +25,25 @@ const authReducer = (state, action) => {
 
 const restoreToken = dispatch => {
   return async () => {
-    dispatch({
-      type: 'signin',
-      payload: {
-        token: await AsyncStorage.getItem('simplab-user-token'),
-      },
-    });
+    let userToken = await AsyncStorage.getItem('simplab-user-token');
+    if (userToken) {
+      await axios
+        .get(`https://simplab-api.herokuapp.com/api/users/${userToken}`)
+        .then((res) => {
+          dispatch({
+            type: 'signin',
+            payload: {
+              token: userToken,
+              username: res.data.username,
+              email: res.data.email,
+              profile_image: res.data.profile_image,
+              organization: res.data.organization,
+              contact: res.data.contact,
+            },
+          });
+        })
+        .catch(err => console.log(err));
+    }
   };
 };
 
@@ -63,7 +76,7 @@ const signin = dispatch => {
     await axios
       .get(`https://simplab-api.herokuapp.com/api/auth/${username}/${password}`)
       .then(async res => {
-        await AsyncStorage.setItem('simplab-user-token', `${res.data.user}`)
+        await AsyncStorage.setItem('simplab-user-token', `${res.data.user}`);
         dispatch({
           type: 'signin',
           payload: {
@@ -73,7 +86,6 @@ const signin = dispatch => {
             profile_image: res.data.profile_image,
             organization: res.data.organization,
             contact: res.data.contact,
-            teams: res.data.teams,
           },
         });
       })

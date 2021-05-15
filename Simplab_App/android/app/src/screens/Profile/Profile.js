@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useContext, useState } from 'react'
 import { StyleSheet,ScrollView, Button, View,ImageBackground ,Text,TextInput,Image,TouchableOpacity} from 'react-native';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
@@ -8,13 +8,16 @@ import simpText from '../Home/images/SIMPLAB-white.png';
 import edit from '../Home/images/Group-45.png';
 import back from '../Home/images/Vector.png';
 import * as ImagePicker from "react-native-image-picker" 
+import {Context as AuthContext} from '../../context/AuthContext'
 
 export default function Profile({navigation}) {
-    const [email, onChangeEmail] = React.useState('pepper_sj@cs.iitr.ac.in');
-    const [contact, onChangeContact] = React.useState('8821820534');
-    const [organization, onChangeOrganization] = React.useState('ARMY PUBLIC SCHOOL, MHOW');
-    const [name, onChangeName] = React.useState('PEPPER  STARK');
+  const {state} = useContext(AuthContext)
+    const [email, onChangeEmail] = React.useState(state.email);
+    const [contact, onChangeContact] = React.useState(state.organization);
+    const [organization, onChangeOrganization] = React.useState(state.contact);
+    const [name, onChangeName] = React.useState(state.username);
     const [filePath, setFilePath] = useState({});
+
 
     const chooseFile = () => {
         let options = {

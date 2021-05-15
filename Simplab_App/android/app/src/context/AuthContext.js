@@ -1,11 +1,13 @@
 import createDataContext from './createDataContext';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'signout':
       return {token: null, email: ''};
     case 'signin':
+    case 'restoreToken':
     case 'signup':
       return {
         token: action.payload.token,
@@ -21,35 +23,47 @@ const authReducer = (state, action) => {
   }
 };
 
-const signup = dispatch => {
-  return ({Username,email, password,navigation}) => {
-    //console.log('Signup');
-    //console.log(email, password);
-    axios.post('https://simplab-api.herokuapp.com/api/users/', {
-      username: Username,
-      password: password,
-      email: email
-    })
-    .then(function (response) {
-      console.log(response.data);
-      alert("User registered successfully.");
-    })
-    .catch(function (error) {
-      console.log(error);
-      alert(error);
+const restoreToken = dispatch => {
+  return async () => {
+    dispatch({
+      type: 'signin',
+      payload: {
+        token: await AsyncStorage.getItem('simplab-user-token'),
+      },
     });
   };
 };
 
-const signin = dispatch => {
-  return ({username, password}) => {
-    // Do some API Request here
-    console.log('Signin');
+const signup = dispatch => {
+  return async ({Username, email, password}) => {
+    //console.log('Signup');
+    //console.log(email, password);
+    await axios
+      .post('https://simplab-api.herokuapp.com/api/users/', {
+        username: Username,
+        password: password,
+        email: email,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        alert('User registered successfully.');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error);
+      });
+  };
+};
 
-    axios
+const signin = dispatch => {
+  return async ({username, password}) => {
+    // Do some API Request here
+    console.log(username, password);
+
+    await axios
       .get(`https://simplab-api.herokuapp.com/api/auth/${username}/${password}`)
-      .then(res => {
-        console.log(res.data);
+      .then(async res => {
+        await AsyncStorage.setItem('simplab-user-token', `${res.data.user}`)
         dispatch({
           type: 'signin',
           payload: {
@@ -62,7 +76,6 @@ const signin = dispatch => {
             teams: res.data.teams,
           },
         });
-        return 1;
       })
       .catch(e => {
         console.log(e);
@@ -80,6 +93,6 @@ const signout = dispatch => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signout, signup},
+  {signin, signout, signup, restoreToken},
   {token: null, email: ''},
 );

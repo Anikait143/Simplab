@@ -15,13 +15,13 @@ import Files from './files';
 import bckImage from './TeamAssets/bckImg.png';
 import back from './TeamAssets/back.png';
 
-function viewShow(i) {
+function viewShow(i, navigation) {
   if (i === 'Experiments') {
-    return <Experiments />;
+    return <Experiments navigation={navigation}  />;
   } else if (i === 'Files') {
-    return <Files />;
+    return <Files navigation={navigation} />;
   }
-  return <Chats />;
+  return <Chats navigation={navigation} />;
 }
 
 export default function Router({route, navigation}) {
@@ -34,9 +34,6 @@ export default function Router({route, navigation}) {
       selectedValue={tabOpen}
       setSelectedValue={setTabOpen}
       navigator={navigation}>
-      <Chats />
-      <Experiments />
-      <Files />
     </NavBar>
   );
 }
@@ -76,7 +73,7 @@ const NavBar = ({
           </TouchableOpacity>
         ))}
       </View>
-      {viewShow(selectedValue)}
+      {viewShow(selectedValue, navigator)}
     </ImageBackground>
   </View>
 );

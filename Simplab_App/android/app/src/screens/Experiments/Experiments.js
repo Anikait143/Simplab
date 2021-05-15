@@ -79,10 +79,16 @@ export default function Experiments({navigation}) {
             renderItem={({item}) => {
               return item.isComplete ? (
                 isCompletedOpen ? (
-                  <Item item={item} />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ExperimentDetail')}>
+                    <Item item={item} />
+                  </TouchableOpacity>
                 ) : null
               ) : isAssignedOpen ? (
-                <Item item={item} />
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ExperimentDetail')}>
+                  <Item item={item} />
+                </TouchableOpacity>
               ) : null;
             }}
             renderSectionHeader={({section: {title}}) => {

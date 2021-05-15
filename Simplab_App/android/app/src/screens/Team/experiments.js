@@ -12,7 +12,7 @@ import add from './TeamAssets/add.png';
 import arrowDown from './TeamAssets/arrowDown.png';
 import arrowUp from './TeamAssets/arrowUp.png';
 import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const DATA = [
   {
@@ -64,7 +64,6 @@ const Item = ({item}) => (
 export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
-
   return (
     <View style={styles.container}>
       <SectionList
@@ -73,10 +72,16 @@ export default function Experiments({navigation}) {
         renderItem={({item}) => {
           return item.isComplete ? (
             isCompletedOpen ? (
-              <Item item={item} />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ExperimentDetail')}>
+                <Item item={item} />
+              </TouchableOpacity>
             ) : null
           ) : isAssignedOpen ? (
-            <Item item={item} />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ExperimentDetail')}>
+              <Item item={item} />
+            </TouchableOpacity>
           ) : null;
         }}
         renderSectionHeader={({section: {title}}) => {
@@ -108,8 +113,7 @@ export default function Experiments({navigation}) {
         <Image source={add} />
       </TouchableOpacity>
     </View>
-    );
-  
+  );
 }
 
 const styles = StyleSheet.create({

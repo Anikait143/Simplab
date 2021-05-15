@@ -12,7 +12,7 @@ import alerts from '../alerts/alerts';
 import Experiments from '../Experiments/Experiments';
 import Settings from '../Settings/Settings';
 import Lib from '../Library/LibraryMain';
-import router from '../Team/router';
+import Router from '../Team/router';
 import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
 import settings from '../Settings/Settings';
 
@@ -21,8 +21,9 @@ const Tab = createBottomTabNavigator();
 function HomeTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Teams"
-      tabBarOptions={{
+    initialRouteName="Teams"
+    tabBarOptions={{
+        keyboardHidesTabBar: true,
         style: {
           backgroundColor: 'black',
         },
@@ -118,7 +119,7 @@ export default function Home() {
       <RootStack.Screen name="Home" component={HomeTabs} />
       <RootStack.Screen name="Profile" component={Profile} />
       <RootStack.Screen name="Library" component={Lib} />
-      <RootStack.Screen name="router" component={router} />
+      <RootStack.Screen name="Router" component={Router} />
       <RootStack.Screen name="ExperimentDetail" component={ExperimentDetail} />
       <RootStack.Screen name="settings" component={settings} />
     </RootStack.Navigator>

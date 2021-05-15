@@ -24,17 +24,16 @@ function viewShow(i) {
   return <Chats />;
 }
 
-export default function Router({navigation}) {
+export default function Router({route, navigation}) {
   const [tabOpen, setTabOpen] = useState('Chats');
-
+  const {team_id, team_name} = route.params;
   return (
     <NavBar
-      label="Class 12 phy"
+      label={team_name}
       values={['Chats', 'Experiments', 'Files']}
       selectedValue={tabOpen}
       setSelectedValue={setTabOpen}
-      navigator={navigation}
-      >
+      navigator={navigation}>
       <Chats />
       <Experiments />
       <Files />
@@ -42,11 +41,20 @@ export default function Router({navigation}) {
   );
 }
 
-const NavBar = ({label, children, values, selectedValue, setSelectedValue,navigator}) => (
+const NavBar = ({
+  label,
+  children,
+  values,
+  selectedValue,
+  setSelectedValue,
+  navigator,
+}) => (
   <View style={styles.container}>
     <ImageBackground source={bckImage} style={styles.imageBackground}>
       <View style={[styles.row, {paddingTop: 40, paddingBottom: 5}]}>
-        <TouchableOpacity style={{left: -110}} onPress={() => navigator.navigate('Home')}>
+        <TouchableOpacity
+          style={{left: -110}}
+          onPress={() => navigator.navigate('Home')}>
           <Image source={back} />
         </TouchableOpacity>
         <Text style={styles.label}>{label}</Text>

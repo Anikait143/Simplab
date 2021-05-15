@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   Switch,
+  Alert,
 } from 'react-native';
 import {ceil} from 'react-native-reanimated';
 import bckImage from './SettingsAssets/BackImageSettings.png';
@@ -17,17 +18,51 @@ import info from './SettingsAssets/info.png';
 import logOut from './SettingsAssets/log-out.png';
 import settingsText from './SettingsAssets/settingsText.png';
 import {Context as AuthContext} from '../../context/AuthContext';
+import axios from 'axios';
 
-export default function Settings({navigation}) {
-  const [contact, onChangeContact] = React.useState('');
-  const [email, onChangeEmail] = React.useState('');
-  const [organization, onChangeOrganization] = React.useState('');
+export default function Settings() {
+  const {state, signout} = useContext(AuthContext);
+  const [contact, onChangeContact] = React.useState(state.contact);
+  const [email, onChangeEmail] = React.useState(state.email);
+  const [organization, onChangeOrganization] = React.useState(
+    state.organization,
+  );
   const [currPassword, onChangeCurrPassword] = React.useState('');
   const [newPassword, onChangeNewPassword] = React.useState('');
   const [confPassword, onChangeconfPassword] = React.useState('');
   const [showNotif, onChangeShowNotif] = React.useState(true);
 
-  const {state, signout} = useContext(AuthContext);
+
+  const updateUserDetails = async () => {
+    await axios
+      .put(`https://simplab-api.herokuapp.com/api/edit/user-detail/${state.token}`, {
+        user: state.token,
+        email: email,
+        organization: organization,
+        contact: contact
+      })
+      .then(()=>{
+        Alert.alert("Success", "Your details have been changed successfully.")
+      })
+      .catch(err => {
+        Alert.alert("Error", "Detail reset request failed")
+      });
+  };
+
+  const updateUserPassword = async () => {
+    if(newPassword !== confPassword) return Alert.alert("Failed", "Confirmation of new password failed.")
+    await axios
+      .put(`https://simplab-api.herokuapp.com/api/auth/change-password/${state.token}/${currPassword}`, {
+        username: state.username,
+        password: newPassword
+      })
+      .then(()=>{
+        Alert.alert("Success", "Your password has been changed successfully.")
+      })
+      .catch(err => {
+        Alert.alert("Error", "Password reset request failed")
+      });
+  };
 
   return (
     <ScrollView>
@@ -76,6 +111,30 @@ export default function Settings({navigation}) {
                 placeholderTextColor="#939393"
               />
             </View>
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#F37A27',
+                borderRadius: 17.5,
+                height: 35,
+                width: 91,
+                marginRight: 15,
+                marginTop: 15,
+                alignSelf: 'flex-end',
+                alignItems: 'center',
+                textAlignVertical: 'center',
+                justifyContent: 'center',
+              }}
+              onPress={() => updateUserDetails()}>
+              <Text
+                style={{
+                  textAlignVertical: 'center',
+                  fontWeight: '700',
+                  fontSize: 16,
+                  color: '#FFFFFF',
+                }}>
+                Update
+              </Text>
+            </TouchableOpacity>
 
             <Text style={styles.labeltext}>Password</Text>
             <View style={styles.Textinputcontainer}>
@@ -118,7 +177,7 @@ export default function Settings({navigation}) {
                 textAlignVertical: 'center',
                 justifyContent: 'center',
               }}
-              onPress={() => console.log('hi')}>
+              onPress={() => updateUserPassword()}>
               <Text
                 style={{
                   textAlignVertical: 'center',
@@ -126,7 +185,7 @@ export default function Settings({navigation}) {
                   fontSize: 16,
                   color: '#FFFFFF',
                 }}>
-                Submit
+                Change
               </Text>
             </TouchableOpacity>
             <Text style={styles.headertext}>Notifications</Text>

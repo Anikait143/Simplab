@@ -104,7 +104,7 @@ export default function Teams({navigation}) {
                   />
                   <Text
                     style={{
-                      marginLeft: 25,
+                      marginLeft: '25px',
                       marginTop: 10,
                       fontWeight: '700',
                       fontSize: 15,
@@ -218,9 +218,9 @@ export default function Teams({navigation}) {
                       //textAlignVertical: 'center',
                       justifyContent: 'center',
                     }}
-                    onPress={() => {
+                    onPress={async () => {
                       //console.log('hi')
-                      axios
+                      await axios
                         .put(
                           `https://simplab-api.herokuapp.com/api/join-team/${Code}/${state.token}`,
                         )
@@ -322,7 +322,7 @@ export default function Teams({navigation}) {
                         .then(function (response) {
                           console.log('Team registered');
                           setShowCreateTeam(false);
-                          navigation.navigate('router', {
+                          navigation.navigate('Router', {
                             team_id: response.data,
                           });
                           //alert("User registered successfully.");
@@ -373,7 +373,7 @@ export default function Teams({navigation}) {
               {List.map(element => {
                 return (
                   <TouchableOpacity
-                  key={`${element.id}`}
+                    key={`${element.id}`}
                     style={{
                       backgroundColor: '#1E2326',
                       borderRadius: 12,
@@ -385,7 +385,7 @@ export default function Teams({navigation}) {
                       marginLeft: 10,
                       marginTop: 20,
                     }}
-                    onPress={() => navigation.navigate('router')}>
+                    onPress={() => navigation.navigate('Router', {team_id: element.id, team_name: element.team_name})}>
                     <Text
                       style={{
                         marginLeft: 15,

@@ -20,7 +20,6 @@ import hash from '../Home/images/hash.png';
 import pattern from '../alerts/AlertsAssets/intersect2.png';
 import {Context as AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
-
 export default function Teams({navigation}) {
   const [ShowCreateTeam, setShowCreateTeam] = useState(false);
   const [ShowJoinTeam, setShowJoinTeam] = useState(false);
@@ -28,10 +27,11 @@ export default function Teams({navigation}) {
   const [Title, onChangeTitle] = React.useState('');
   const [List, setList] = React.useState([]);
   const {state} = useContext(AuthContext);
-
+  
   let _menu = null;
-
+  
   useEffect(() => {
+    console.log(state)
     team_list();
   }, [ShowCreateTeam, ShowJoinTeam]);
 
@@ -41,7 +41,8 @@ export default function Teams({navigation}) {
       .then(async res => {
         const dat = res.data;
         setList(res.data);
-      });
+      })
+      .catch(err => console.log(err));
   }
 
   const array = [
@@ -177,7 +178,16 @@ export default function Teams({navigation}) {
                 }}
                 onPress={() => navigation.navigate('Profile')}>
                 <View>
-                  <Image source={profphoto} style={{height: 70, width: 70}} />
+                  <Image
+                    source={
+                      state.profile_image
+                        ? {
+                            uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
+                          }
+                        : profphoto
+                    }
+                    style={{height: 70, borderRadius: 50, width: 70}}
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -320,8 +330,6 @@ export default function Teams({navigation}) {
                           },
                         )
                         .then(function (response) {
-                          console.log('Team registered');
-                          setShowCreateTeam(false);
                           navigation.navigate('Router', {
                             team_id: response.data,
                           });
@@ -385,7 +393,12 @@ export default function Teams({navigation}) {
                       marginLeft: 10,
                       marginTop: 20,
                     }}
-                    onPress={() => navigation.navigate('Router', {team_id: element.id, team_name: element.team_name})}>
+                    onPress={() =>
+                      navigation.navigate('Router', {
+                        team_id: element.id,
+                        team_name: element.team_name,
+                      })
+                    }>
                     <Text
                       style={{
                         marginLeft: 15,

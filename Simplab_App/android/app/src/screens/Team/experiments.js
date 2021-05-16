@@ -97,7 +97,7 @@ export default function Experiments({navigation, admin}) {
   const {state} = useContext(AuthContext);
   const [Date, onChangeDate]=React.useState("2016-05-15")
   const [text,onChangeText]=React.useState("")
-  const [item,setItem] = React.useState("")
+  const [item,setItem] = React.useState("Magnetic field Lines in a coil")
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [time, setTime] = React.useState('23:59');
     const options = [

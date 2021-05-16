@@ -111,7 +111,7 @@ export default function Teams({navigation}) {
                       fontSize: 15,
                       color: '#FFFFFF',
                     }}>
-                    Create Team
+                    {'  '}Create Team
                   </Text>
                 </MenuItem>
                 <MenuItem
@@ -132,7 +132,7 @@ export default function Teams({navigation}) {
                       fontSize: 15,
                       color: '#FFFFFF',
                     }}>
-                    Join Team with Code
+                    {'  '}Join Team with Code
                   </Text>
                 </MenuItem>
                 <MenuItem
@@ -152,7 +152,7 @@ export default function Teams({navigation}) {
                       fontSize: 15,
                       color: '#FFFFFF',
                     }}>
-                    Library
+                    {'  '}Library
                   </Text>
                 </MenuItem>
               </Menu>
@@ -237,7 +237,7 @@ export default function Teams({navigation}) {
                         .then(res => {
                           //console.log(res.data);
                           setShowJoinTeam(false);
-                          navigation.navigate('router', {team_id: Code});
+                          navigation.navigate('Router', {team_id: Code});
                         })
                         .catch(e => {
                           console.log(e);
@@ -393,12 +393,8 @@ export default function Teams({navigation}) {
                       marginLeft: 10,
                       marginTop: 20,
                     }}
-                    onPress={() =>
-                      navigation.navigate('Router', {
-                        team_id: element.id,
-                        team_name: element.team_name,
-                      })
-                    }>
+                    onPress={() => navigation.navigate('Router', {admin: element.admin ,team_id: element.id, team_name: element.team_name})}>
+
                     <Text
                       style={{
                         marginLeft: 15,

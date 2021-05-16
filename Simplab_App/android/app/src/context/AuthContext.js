@@ -4,10 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authReducer = (state, action) => {
   switch (action.type) {
+    case 'restoreToken':
     case 'signout':
       return {token: null, email: ''};
     case 'signin':
-    case 'restoreToken':
+    case 'updateProfileImage':
     case 'signup':
       return {
         token: action.payload.token,
@@ -23,13 +24,24 @@ const authReducer = (state, action) => {
   }
 };
 
+const updateProfileImage = dispatch => {
+  console.log('inside-image-updater');
+  return (objPayload) => {
+    console.log(objPayload)
+    dispatch({
+      type: 'updateProfileImage',
+      payload: objPayload,
+    });
+  };
+};
+
 const restoreToken = dispatch => {
   return async () => {
     let userToken = await AsyncStorage.getItem('simplab-user-token');
     if (userToken) {
       await axios
         .get(`https://simplab-api.herokuapp.com/api/users/${userToken}`)
-        .then((res) => {
+        .then(res => {
           dispatch({
             type: 'signin',
             payload: {
@@ -58,7 +70,6 @@ const signup = dispatch => {
         email: email,
       })
       .then(function (response) {
-        console.log(response.data);
         alert('User registered successfully.');
       })
       .catch(function (error) {
@@ -105,6 +116,6 @@ const signout = dispatch => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signout, signup, restoreToken},
+  {signin, signout, signup, restoreToken, updateProfileImage},
   {token: null, email: ''},
 );

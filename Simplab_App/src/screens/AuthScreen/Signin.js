@@ -51,7 +51,7 @@ export default function Signin({navigation}) {
             label="Password"
             onChangeText={text => onChangePassword(text)}
             value={password}
-            placeholder="PASSWORD"
+            placeholder="Password"
             placeholderTextColor="#9C9C9C"
           />
 

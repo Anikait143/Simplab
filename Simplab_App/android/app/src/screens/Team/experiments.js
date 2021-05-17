@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Touchable} from 'react-native';
 import {
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
 import add from './TeamAssets/add.png';
 import arrowDown from './TeamAssets/arrowDown.png';
 import arrowUp from './TeamAssets/arrowUp.png';
@@ -61,9 +62,24 @@ const Item = ({item}) => (
   </View>
 );
 
-export default function Experiments({navigation}) {
+export default function Experiments({navigation, team_id, team_name}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
+
+  useEffect(() => {
+    getExp();
+  }, []);
+
+  function getExp() {
+    /* axios
+      .get(`https://simplab-api.herokuapp.com/api/assignments/${team_id}`)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(e => {
+        console.log(e);
+      }); */
+  }
   return (
     <View style={styles.container}>
       <SectionList

@@ -5,10 +5,6 @@ import {Provider as AuthProvider} from './src/context/AuthContext';
 import {Context as AuthContext} from './src/context/AuthContext';
 import TourMain from './src/screens/Tour/TourMain';
 import Home from './src/screens/Home/Home';
-<<<<<<< HEAD
-
-=======
->>>>>>> 6752dea6b1db3d4bb157b95eb9db830547d8fd64
 
 const Stack = createStackNavigator();
 

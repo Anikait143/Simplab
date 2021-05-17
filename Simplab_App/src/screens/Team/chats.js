@@ -15,6 +15,7 @@ import send_button from './TeamAssets/send_button.png';
 import attach from './TeamAssets/attach.png';
 import download from './TeamAssets/download.png';
 import file from './TeamAssets/file.png';
+import Fire from '../../../Fire'
 
 const DATA = [
   {

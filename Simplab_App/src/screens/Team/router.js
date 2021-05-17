@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
 import Chats from './chats';
 import Experiments from './experiments';
 import Clipboard from '@react-native-community/clipboard';
@@ -78,26 +79,7 @@ export default function Router({route, navigation}) {
     {data: 'devansh_j@cs.iitr.ac.in'},
   ]);
   const [text, onChangeText] = React.useState('');
-  const [Members, onChangeMembers] = React.useState([
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-  ]);
+  const [Members, onChangeMembers] = React.useState([]);
   return (
     <NavBar
       team_id={team_id}
@@ -336,8 +318,8 @@ const NavBar = ({
           <ScrollView style={styles.Scrollstyle}>
             {Members.map((item, key) => {
               return (
-                <Text key={key} style={styles.ScrollElement}>
-                  {item.data}
+                <Text key={key} style={[styles.ScrollElement,{marginVertical:5}]}>
+                  {item.username}
                 </Text>
               );
             })}
@@ -387,8 +369,17 @@ const NavBar = ({
               style={{marginLeft: 0}}
               onPress={() => {
                 //navigator.navigate('ShowMembers');
-                setmemVisible(true);
-                _menu.hide();
+                axios
+                .get(`https://simplab-api.herokuapp.com/api/students/${teamId}`)
+                .then(async res => {
+                  const dat = res.data;
+                  //setList(res.data);
+                  onChangeMembers(res.data);
+                  //console.log(res.data);
+                  setmemVisible(true);
+                  _menu.hide();
+                })
+                .catch(err => console.log(err));
               }}>
               <Image
                 style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}

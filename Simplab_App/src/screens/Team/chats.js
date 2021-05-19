@@ -23,10 +23,16 @@ import Fire from '../../../Fire';
 const MsgTile = ({item}) => (
   <View style={styles.item}>
     <View style={{paddingLeft: 10, paddingBottom: 10}}>
-      {/* <Image
-        source={{uri: `https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg`}}
-        style={{top: 10, left: 0, alignSelf: 'flex-start', height: 10}}
-      /> */}
+      <Image
+        style={{top: 10, left: 0, alignSelf: 'flex-start'}}
+        source={
+          item.profile_image
+            ? {
+                uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
+              }
+            : avatar
+        }
+      />
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.time}>
         {item.date}, {item.time}

@@ -72,7 +72,7 @@ export default function Experiments({navigation, admin, team_id}) {
   const [showeditAssign, setshoweditAssign] = useState(false);
   const [Assign, setAssign] = useState(false);
   const [ready, setReady] = useState([]);
-  const [istrue,setTrue] = useState('0');
+  const [istrue,setTrue] = useState([]);
   const [DATA, setDATA] = useState([]);
   const {state} = useContext(AuthContext);
   const [Date, onChangeDate] = React.useState('2016-05-15');
@@ -85,7 +85,8 @@ export default function Experiments({navigation, admin, team_id}) {
   const [temp, setTemp] = React.useState(false);
   const [temp2, setTemp2] = React.useState(false);
   const [temp1, setTemp1] = React.useState(0);
-  const [time1, setTime1] = React.useState('');
+  const [temp3, setTemp3] = React.useState(0);
+  const [time1, setTime1] = React.useState(false);
   const [Date1, setDate1] = React.useState('');
   const options = [
     {label: 'AM', value: '0'},
@@ -105,7 +106,8 @@ export default function Experiments({navigation, admin, team_id}) {
     //console.warn("A date has been picked: ", time);
     setTime(Moment(Time).format('HH:mm'));
     //console.log(time);
-    setTime1(Moment(Time).format('HH:mm'));
+    istrue.due_time = Moment(Time).format('HH:mm');
+    setTime1(true);
     hideDatePicker();
   };
 
@@ -131,18 +133,19 @@ export default function Experiments({navigation, admin, team_id}) {
           .get(`https://simplab-api.herokuapp.com/api/submissions-list/${id}`)
           .then(res1 => {
             setReady(res.data);
-            //setTemp(item);
-            setDate1(ready.due_date);
-            setTime1(ready.due_time);
+            var array = [...DATA]
+            setTrue(array[key]);
+            array.splice(key, 1);
+            //console.log(istrue);
+            //istrue.exp = 1;
+            //console.log(istrue);
+            //setDATA(array);
             setTemp1(id);
+            setTemp3(key);
             onChangesubmission(res1.data);
             setshoweditAssign(true);
-            //setDATA(res.data);
-            //setReady(true);
           })
           .catch(e => console.log(e));
-        //setDATA(res.data);
-        //setReady(true);
       })
       .catch(err => console.log(err));
   }
@@ -422,7 +425,9 @@ export default function Experiments({navigation, admin, team_id}) {
           </Text>
           <TouchableOpacity
             style={styles.crossimage}
-            onPress={() => setshoweditAssign(false)}>
+            onPress={() => {
+              setshoweditAssign(false)
+            }}>
             <Image source={cross} />
           </TouchableOpacity>
 
@@ -459,7 +464,7 @@ export default function Experiments({navigation, admin, team_id}) {
                 color: '#fff !important',
                 backgroundColor: '#000',
               }}
-              date={Date1}
+              date={istrue.due_date}
               mode="date"
               placeholder="Select date"
               format="YYYY-MM-DD"
@@ -485,6 +490,7 @@ export default function Experiments({navigation, admin, team_id}) {
                 // ... You can check the source to find the other keys.
               }}
               onDateChange={date => {
+                  istrue.due_date = date;
                   setDate1(date);
               }}
             />
@@ -506,7 +512,7 @@ export default function Experiments({navigation, admin, team_id}) {
                   fontWeight: '700',
                   fontSize: 15,
                 }}>
-                {time1}
+                {istrue.due_time}
               </Text>
             </TouchableOpacity>
             <DateTimePickerModal
@@ -525,12 +531,15 @@ export default function Experiments({navigation, admin, team_id}) {
                   .put(
                     `https://simplab-api.herokuapp.com/api/edit/assignment-detail/${temp1}`,
                     {
-                      due_date: Date,
-                      due_time: time                   
+                      due_date: istrue.due_date,
+                      due_time: time,                   
                     }
                   )
                   .then(res => {
                     console.log(res.data);
+                    DATA[temp3].due_time = istrue.due_time;
+                    DATA[temp3].due_date = istrue.due_date;
+                    console.log(DATA);
                     setTemp(!temp);
                     setshoweditAssign(false)
                   })
@@ -543,7 +552,9 @@ export default function Experiments({navigation, admin, team_id}) {
 
             <TouchableOpacity
               style={styles.cancelButton}
-              onPress={() => setshoweditAssign(false)}>
+              onPress={() => {
+                setshoweditAssign(false)
+              }}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>

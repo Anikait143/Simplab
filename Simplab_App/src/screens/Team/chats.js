@@ -18,13 +18,20 @@ import send_button from './TeamAssets/send_button.png';
 import attach from './TeamAssets/attach.png';
 import download from './TeamAssets/download.png';
 import file from './TeamAssets/file.png';
+import Fire from '../../../Fire';
 
 const MsgTile = ({item}) => (
   <View style={styles.item}>
     <View style={{paddingLeft: 10, paddingBottom: 10}}>
       <Image
         style={{top: 10, left: 0, alignSelf: 'flex-start'}}
-        source={{uri: `https://simplab-api.herokuapp.com${item.profile}`}}
+        source={
+          item.profile_image
+            ? {
+                uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
+              }
+            : avatar
+        }
       />
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.time}>
@@ -56,19 +63,45 @@ const FileTile = ({item}) => (
       style={{bottom: 15, right: 0, alignSelf: 'flex-end'}}
       source={download}
     />
-    <Text style={styles.file_name}>
-      {item.file_name.substr(item.file_name.search('files') + 6)}
-    </Text>
+    {item.is_file ? (
+      <Text style={styles.file_name}>
+        {item.file_name.substr(item.file_name.search('files') + 6)}
+      </Text>
+    ) : (
+      <Text></Text>
+    )}
   </View>
 );
 
 export default function Chats({navigation, team_id, team_name}) {
   const [msg, onChangeMsg] = useState('');
   const [chats, onChangeChats] = useState([]);
+  const [chatsRTC, setRTCChats] = useState([]);
   const {state} = useContext(AuthContext);
   const [singleFile, setSingleFile] = React.useState(null);
 
-  console.log('state' + state.profile_image);
+  useEffect(() => {
+    Fire.get(element => {
+      if (element.team === team_id)
+        onChangeChats(oldChats => [
+          ...oldChats,
+          {
+            key: element._id,
+            isFile: element.is_file,
+            msg: element.message,
+            name: element.sender_name,
+            time: element.sent_time,
+            date: element.date,
+            profile: element.sender_profile,
+            file_name: element.chat_file,
+          },
+        ]);
+    });
+    getChats();
+    return () => {
+      Fire.off();
+    };
+  }, []);
 
   const selectFile = async () => {
     try {
@@ -83,7 +116,6 @@ export default function Chats({navigation, team_id, team_name}) {
         // DocumentPicker.types.pdf
       });
       // Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
       // Setting the state to show single file attributes
       setSingleFile(res);
     } catch (err) {
@@ -100,11 +132,31 @@ export default function Chats({navigation, team_id, team_name}) {
     }
   };
 
-  useEffect(() => {
-    getChats();
-  }, []);
+  const sendRTC = () => {
+    Fire.send({
+      team: team_id,
+      is_file: singleFile ? true : false,
+      message: msg,
+      sender_name: state.username,
+      sent_time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      date: new Date().toISOString().slice(0, 10),
+      sender_profile: state.profile_image,
+      chat_file: singleFile
+        ? {
+            uri: singleFile.uri,
+            name: singleFile.name,
+            type: singleFile.type,
+          }
+        : null,
+    });
+  };
 
-  function postChat() {
+  async function postChat() {
+    sendRTC();
+
     let form_data = new FormData();
     form_data.append('date', new Date().toISOString().slice(0, 10));
     form_data.append('message', msg);
@@ -126,15 +178,11 @@ export default function Chats({navigation, team_id, team_name}) {
         minute: '2-digit',
       }),
     );
-    axios
+    await axios
       .post(`https://simplab-api.herokuapp.com/api/post-chat/`, form_data, {
         headers: {
           type: 'multipart/form-data',
         },
-      })
-      .then(res => {
-        //console.log('chats:' + res.data);
-        getChats();
       })
       .catch(e => {
         console.log(e);
@@ -147,9 +195,6 @@ export default function Chats({navigation, team_id, team_name}) {
       .then(res => {
         const temp = [];
         res.data.forEach(element => {
-          for (let key in element) {
-            console.log(key + ': ' + element[key]);
-          }
           temp.push({
             key: element.id,
             isFile: element.is_file,
@@ -170,32 +215,35 @@ export default function Chats({navigation, team_id, team_name}) {
 
   return (
     <View style={styles.container}>
-      <View style={{width: '100%', flex: 1}}>
+      <View style={{width: '100%', flex: 9}}>
         <FlatList
           data={chats}
           renderItem={({item}) => <MsgTile item={item} />}
         />
       </View>
-      <TouchableOpacity
-        style={styles.send_button}
-        onPress={() => {
-          postChat();
-          onChangeMsg('');
-        }}>
-        <Image source={send_button} />
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeMsg}
-        value={msg}
-        placeholder="Type a message"
-      />
-      <TouchableOpacity style={styles.smiley} onPress={() => {}}>
-        <Image source={smiley} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.attach} onPress={selectFile}>
-        <Image source={attach} />
-      </TouchableOpacity>
+
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={styles.send_button}
+          onPress={() => {
+            postChat();
+            onChangeMsg('');
+          }}>
+          <Image source={send_button} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeMsg}
+          value={msg}
+          placeholder="Type a message"
+        />
+        <TouchableOpacity style={styles.smiley} onPress={() => {}}>
+          <Image source={smiley} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.attach} onPress={selectFile}>
+          <Image source={attach} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

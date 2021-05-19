@@ -77,35 +77,21 @@ export default function Experiments({navigation, admin, team_id}) {
   const {state} = useContext(AuthContext);
   const [Date, onChangeDate] = React.useState('2016-05-15');
   const [text, onChangeText] = React.useState(0);
-  const [item, setItem] = React.useState('Magnetic field Lines in a coil');
-  const [val, setVal] = React.useState('Magnetic field Lines in a coil');
+  const [item, setItem] = React.useState('Electric Field of Point Charge');
+  const [val, setVal] = React.useState('Electric Field of Point Charge');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = React.useState('11:59');
   const [vartime, setvarTime] = React.useState('');
+  const [temp, setTemp] = React.useState(false);
+  const [temp2, setTemp2] = React.useState(false);
+  const [temp1, setTemp1] = React.useState(0);
+  const [time1, setTime1] = React.useState('');
+  const [Date1, setDate1] = React.useState('');
   const options = [
     {label: 'AM', value: '0'},
     {label: 'PM', value: '1'},
   ];
-  const [Submission, onChangesubmission] = React.useState([
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-    {name: 'Devansh Joshi', emailid: 'devansh_j@cs.iitr.ac.in'},
-  ]);
+  const [Submission, onChangesubmission] = React.useState([]);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -118,13 +104,14 @@ export default function Experiments({navigation, admin, team_id}) {
   const handleConfirm = Time => {
     //console.warn("A date has been picked: ", time);
     setTime(Moment(Time).format('HH:mm'));
-    console.log(time);
+    //console.log(time);
+    setTime1(Moment(Time).format('HH:mm'));
     hideDatePicker();
   };
 
   useEffect(() => {
     assign_list();
-  });
+  }, [temp,temp2]);
 
   async function assign_list() {
     await axios
@@ -136,12 +123,24 @@ export default function Experiments({navigation, admin, team_id}) {
       .catch(err => console.log(err));
   }
 
-  function edit_assign(id){
+  function edit_assign(id, item, key){
     axios
       .get(`https://simplab-api.herokuapp.com/api/get-assignment-detail/${id}`)
       .then(res => {
-        setReady(res.data);
-        setshoweditAssign(true);
+        axios
+          .get(`https://simplab-api.herokuapp.com/api/submissions-list/${id}`)
+          .then(res1 => {
+            setReady(res.data);
+            //setTemp(item);
+            setDate1(ready.due_date);
+            setTime1(ready.due_time);
+            setTemp1(id);
+            onChangesubmission(res1.data);
+            setshoweditAssign(true);
+            //setDATA(res.data);
+            //setReady(true);
+          })
+          .catch(e => console.log(e));
         //setDATA(res.data);
         //setReady(true);
       })
@@ -276,22 +275,6 @@ export default function Experiments({navigation, admin, team_id}) {
                 }}>
                 {time}
               </Text>
-              <View style={{width: 60, marginRight: 5, alignSelf: 'center'}}>
-                <SwitchSelector
-                  options={options}
-                  initial={0}
-                  fontSize={10}
-                  height={25}
-                  borderRadius={2}
-                  borderWidth={2}
-                  borderColor={'#F37A27'}
-                  color={'white'}
-                  buttonColor={'#F37A27'}
-                  backgroundColor={'#000000'}
-                  textColor={'#fff'}
-                  onPress={value => setTrue(value)}
-                />
-              </View>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -315,16 +298,16 @@ export default function Experiments({navigation, admin, team_id}) {
             </Text>
             <RNPickerSelect
               style={{width: 100}}
-              placeholder={{
-                label: 'Electric Field of Point Charge',
-                value: 'Electric Field of Point Charge',
-                color: '#CACACA',
-              }}
               onValueChange={(value, index) => {
-                setItem((index+1)),
+                setItem((index)),
                 setVal(value);
               }}
               items={[
+                {
+                  label: 'Electric Field of Point Charge',
+                  value: 'Electric Field of Point Charge',
+                  color: '#CACACA',
+                },
                 {
                   label: 'Ohm\'s Law',
                   value: 'Ohm\'s Law',
@@ -383,19 +366,11 @@ export default function Experiments({navigation, admin, team_id}) {
               style={styles.AddButton}
               onPress={() => {
                 //console.log('hi')
-                if(istrue=='1'){
-                  var x = time.substring(0,2);
-                  var y = parseInt(x, 10);
-                  y += 12;
-                  var z = y.toString();
-                  setvarTime(z+time.substring(2,5)+':00');
-                }else{
-                  setvarTime(time+':00');
-                }
-                //console.log(vartime);
+                setvarTime(time+':00');
+                console.log(vartime, team_id, Date, item, text);
                 axios
                   .post(
-                    'https://simplab-api.herokuapp.com/api/create_assignment',
+                    'https://simplab-api.herokuapp.com/api/create_assignment/',
                     {
                       team: team_id,
                       title: text,
@@ -405,7 +380,9 @@ export default function Experiments({navigation, admin, team_id}) {
                     },
                   )
                   .then(function (response) {
-                    alert("User registered successfully.");
+                    //alert("User registered successfully.");
+                    setAssign(false);
+                    setTemp2(!temp2);
                   })
                   .catch(function (error) {
                     console.log(error);
@@ -482,7 +459,7 @@ export default function Experiments({navigation, admin, team_id}) {
                 color: '#fff !important',
                 backgroundColor: '#000',
               }}
-              date={ready.due_date}
+              date={Date1}
               mode="date"
               placeholder="Select date"
               format="YYYY-MM-DD"
@@ -508,7 +485,7 @@ export default function Experiments({navigation, admin, team_id}) {
                 // ... You can check the source to find the other keys.
               }}
               onDateChange={date => {
-                onChangeDate(date);
+                  setDate1(date);
               }}
             />
 
@@ -529,23 +506,8 @@ export default function Experiments({navigation, admin, team_id}) {
                   fontWeight: '700',
                   fontSize: 15,
                 }}>
-                {ready.due_time}
+                {time1}
               </Text>
-              <View style={{width: 60, marginRight: 5, alignSelf: 'center'}}>
-                <SwitchSelector
-                  options={options}
-                  initial={0}
-                  fontSize={10}
-                  height={25}
-                  borderRadius={2}
-                  borderWidth={2}
-                  borderColor={'#F37A27'}
-                  color={'white'}
-                  buttonColor={'#F37A27'}
-                  backgroundColor={'#000000'}
-                  textColor={'#fff'}
-                />
-              </View>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -558,7 +520,24 @@ export default function Experiments({navigation, admin, team_id}) {
           <View style={styles.ButtonContainer}>
             <TouchableOpacity
               style={styles.AddButton}
-              onPress={() => console.log('hi')}>
+              onPress={() => {
+                axios
+                  .put(
+                    `https://simplab-api.herokuapp.com/api/edit/assignment-detail/${temp1}`,
+                    {
+                      due_date: Date,
+                      due_time: time                   
+                    }
+                  )
+                  .then(res => {
+                    console.log(res.data);
+                    setTemp(!temp);
+                    setshoweditAssign(false)
+                  })
+                  .catch(e => {
+                    console.log(e);
+                  });
+              }}>
               <Text style={styles.buttonText}>Done</Text>
             </TouchableOpacity>
 
@@ -577,7 +556,6 @@ export default function Experiments({navigation, admin, team_id}) {
               marginTop: 20,
             }}>
             <Text style={{color: '#fff', fontSize: 15}}>Submissions</Text>
-            <Text style={{color: '#fff', fontSize: 15}}>24/30</Text>
           </View>
 
           <ScrollView style={styles.Scrollstyle}>
@@ -585,8 +563,10 @@ export default function Experiments({navigation, admin, team_id}) {
               return (
                 <Dropdownelement
                   key={key}
-                  name={item.name}
-                  emailid={item.emailid}
+                  name={item.student_name}
+                  emailid={item.student_email}
+                  date={item.submission_date}
+                  time = {item.submission_time}
                 />
               );
             })}
@@ -607,7 +587,8 @@ export default function Experiments({navigation, admin, team_id}) {
                     : (
                       //setshoweditAssign(true)
                       //console.log(item.id)
-                      edit_assign(item.id)
+                      setTemp(index),
+                      edit_assign(item.id,item, index)
                       );
                 }}>
                 <Item item={item} admin={admin} token={state.token} />

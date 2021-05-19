@@ -26,42 +26,6 @@ import {Context as AuthContext} from '../../context/AuthContext';
 import {TextInput} from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 
-const DATA = [
-  {
-    key: '1',
-    title: 'Assigned',
-    data: [
-      {
-        expNo: 5,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: false,
-      },
-    ],
-  },
-  {
-    key: '2',
-    title: 'Previous',
-    data: [
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: true,
-      },
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: true,
-      },
-    ],
-  },
-];
-
 const exp = [
   {
     value: 'Magnetic Field Lines in a coil',
@@ -79,28 +43,32 @@ const exp = [
 
 const Item = ({item, admin, token}) => (
   <View style={styles.item}>
-    <Text style={styles.expNo}>Experiment {item.expNo}</Text>
-    <Text style={styles.expHeading}>{item.expHeading}</Text>
+    <Text style={styles.expNo}>Experiment {item.exp}</Text>
+    <Text style={styles.expHeading}>{item.title}</Text>
     {token == admin ? (
-      <Text style={styles.submissions}>Submissions: {item.submissions}</Text>
+      <Text style={styles.submissions}>View Submissions</Text>
     ) : null}
-    <Text style={item.isComplete ? styles.dueDate : styles.dueDateOrange}>
-      Due {item.dueDate}
+    <Text style={styles.dueDateOrange}>
+      Due: {item.due_date}
+      {'  '}
+      {item.due_time}
     </Text>
   </View>
 );
 
-export default function Experiments({navigation, admin}) {
+export default function Experiments({navigation, admin, team_id}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
   const [showeditAssign, setshoweditAssign] = useState(false);
   const [Assign, setAssign] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [DATA, setData] = useState([]);
   const {state} = useContext(AuthContext);
   const [Date, onChangeDate] = React.useState('2016-05-15');
   const [text, onChangeText] = React.useState('');
   const [item, setItem] = React.useState('Magnetic field Lines in a coil');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [time, setTime] = React.useState('23:59');
+  const [time, setTime] = React.useState('11:59');
   const options = [
     {label: 'AM', value: '0'},
     {label: 'PM', value: '1'},
@@ -140,6 +108,20 @@ export default function Experiments({navigation, admin}) {
     console.log(time);
     hideDatePicker();
   };
+
+  useEffect(() => {
+    assign_list();
+  });
+
+  async function assign_list() {
+    await axios
+      .get(`https://simplab-api.herokuapp.com/api/assignments/${17}`)
+      .then(res => {
+        setData(res.data);
+        setReady(true);
+      })
+      .catch(err => console.log(err));
+  }
 
   return (
     <View style={styles.container}>
@@ -552,22 +534,9 @@ export default function Experiments({navigation, admin}) {
         </View>
       </Modal>
 
-      <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({item}) => {
-          return item.isComplete ? (
-            isCompletedOpen ? (
-              <TouchableOpacity
-                onPress={() => {
-                  admin != state.token
-                    ? navigation.navigate('ExperimentDetail')
-                    : setshoweditAssign(true);
-                }}>
-                <Item item={item} admin={admin} token={state.token} />
-              </TouchableOpacity>
-            ) : null
-          ) : isAssignedOpen ? (
+      <ScrollView style={{marginTop: 20}}>
+        {DATA.map(item => {
+          return (
             <TouchableOpacity
               onPress={() => {
                 admin != state.token
@@ -576,33 +545,10 @@ export default function Experiments({navigation, admin}) {
               }}>
               <Item item={item} admin={admin} token={state.token} />
             </TouchableOpacity>
-          ) : null;
-        }}
-        renderSectionHeader={({section: {title}}) => {
-          const imgsrc =
-            title === 'Assigned'
-              ? isAssignedOpen
-                ? arrowUp
-                : arrowDown
-              : isCompletedOpen
-              ? arrowUp
-              : arrowDown;
-          return (
-            <View>
-              <TouchableOpacity
-                style={styles.headericon}
-                onPress={() => {
-                  title === 'Assigned'
-                    ? onChangeAssignedOpen(!isAssignedOpen)
-                    : onChangeCompletedOpen(!isCompletedOpen);
-                }}>
-                <Image style={{top: 8}} source={imgsrc} />
-              </TouchableOpacity>
-              <Text style={styles.headertext}>{title}</Text>
-            </View>
           );
-        }}
-      />
+        })}
+      </ScrollView>
+
       {admin == state.token ? (
         <TouchableOpacity style={styles.addBtn} onPress={() => setAssign(true)}>
           <Image source={add} />

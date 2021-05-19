@@ -10,9 +10,40 @@ import {
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
+import DocumentPicker from 'react-native-document-picker';
 
 export default function ExperimentDetail({navigation}) {
   const [result, onChangeResult] = React.useState('');
+  const [singleFile, setSingleFile] = React.useState({});
+
+  const selectFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+        // There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
+      });
+      // Printing the log realted to the file
+      // Setting the state to show single file attributes
+      setSingleFile(res);
+    } catch (err) {
+      setSingleFile(null);
+      // Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        // If user canceled the document selection
+        alert('Canceled');
+      } else {
+        // For Unknown Error
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -56,7 +87,7 @@ export default function ExperimentDetail({navigation}) {
         </Text>
 
         <Text style={styles.textHeading}>Observation</Text>
-        <TouchableOpacity style={styles.upload}>
+        <TouchableOpacity style={styles.upload} onPress={() => selectFile()}>
           <Text style={styles.Text}>Upload Files</Text>
         </TouchableOpacity>
 

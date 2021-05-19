@@ -63,9 +63,13 @@ const FileTile = ({item}) => (
       style={{bottom: 15, right: 0, alignSelf: 'flex-end'}}
       source={download}
     />
-    <Text style={styles.file_name}>
-      {item.file_name.substr(item.file_name.search('files') + 6)}
-    </Text>
+    {item.is_file ? (
+      <Text style={styles.file_name}>
+        {item.file_name.substr(item.file_name.search('files') + 6)}
+      </Text>
+    ) : (
+      <Text></Text>
+    )}
   </View>
 );
 
@@ -211,32 +215,35 @@ export default function Chats({navigation, team_id, team_name}) {
 
   return (
     <View style={styles.container}>
-      <View style={{width: '100%', flex: 1}}>
+      <View style={{width: '100%', flex: 9}}>
         <FlatList
           data={chats}
           renderItem={({item}) => <MsgTile item={item} />}
         />
       </View>
-      <TouchableOpacity
-        style={styles.send_button}
-        onPress={() => {
-          postChat();
-          onChangeMsg('');
-        }}>
-        <Image source={send_button} />
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeMsg}
-        value={msg}
-        placeholder="Type a message"
-      />
-      <TouchableOpacity style={styles.smiley} onPress={() => {}}>
-        <Image source={smiley} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.attach} onPress={selectFile}>
-        <Image source={attach} />
-      </TouchableOpacity>
+
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={styles.send_button}
+          onPress={() => {
+            postChat();
+            onChangeMsg('');
+          }}>
+          <Image source={send_button} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeMsg}
+          value={msg}
+          placeholder="Type a message"
+        />
+        <TouchableOpacity style={styles.smiley} onPress={() => {}}>
+          <Image source={smiley} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.attach} onPress={selectFile}>
+          <Image source={attach} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

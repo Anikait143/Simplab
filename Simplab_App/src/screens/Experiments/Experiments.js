@@ -193,4 +193,87 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     alignSelf: 'flex-end',
   },
+  submissions: {
+    paddingTop: 15,
+    color: '#c1c1c1',
+    fontSize: 11,
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
+  },
+  addBtn: {
+    position: 'absolute',
+    bottom: 40,
+    backgroundColor: '#f37a27',
+    borderRadius: 40,
+    padding: 16,
+    right: 20,
+  },
+  PopupContainer: {
+    width: '90%',
+    marginLeft: '5%',
+    height: 540,
+    zIndex: 11,
+    position: 'absolute',
+    top: 148,
+    backgroundColor: '#3C3C3C',
+    alignItems: 'center',
+  },
+
+  ButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '100%',
+    marginTop: 20,
+    marginRight: 18,
+  },
+
+  Scrollstyle: {
+    height: 100,
+    width: '100%',
+    marginTop: 10,
+
+    marginBottom: 10,
+  },
+  ScrollElement: {fontSize: 14, color: '#fff', fontWeight: '700'},
+
+  Textinput: {
+    marginTop: 20,
+    marginBottom: 20,
+    color: '#9C9C9C',
+    backgroundColor: '#272B2E',
+    textAlign: 'center',
+    width: 300,
+    height: 40,
+    borderRadius: 10,
+  },
+  buttonText: {color: '#fff', fontSize: 15, fontWeight: 'bold'},
+  AddButton: {
+    backgroundColor: '#F37A27',
+    height: 31,
+    width: 80,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  cancelButton: {
+    backgroundColor: '#3C3C3C',
+    borderColor: '#F37A27',
+    borderWidth: 2,
+    height: 31,
+    width: 80,
+    marginLeft: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  crossimage: {position: 'absolute', right: 10, top: 10},
+
+  pickercontainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 5,
+  },
 });

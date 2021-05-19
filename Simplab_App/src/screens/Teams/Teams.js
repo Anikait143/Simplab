@@ -236,8 +236,13 @@ export default function Teams({navigation}) {
                         )
                         .then(res => {
                           //console.log(res.data);
-                          setShowJoinTeam(false);
-                          navigation.navigate('Router', {team_id: Code});
+                          axios
+                          .get(`https://simplab-api.herokuapp.com/api/team-detail/${Code}`)
+                          .then(res1 => {
+                            setShowJoinTeam(false);
+                            navigation.navigate('Router', {team_id: Code,admin: res1.data.admin,team_name: res1.data.team_name,});
+                          })
+                          .catch(err => console.log(err));
                         })
                         .catch(e => {
                           console.log(e);
@@ -330,8 +335,11 @@ export default function Teams({navigation}) {
                           },
                         )
                         .then(function (response) {
+                          setShowCreateTeam(false)
                           navigation.navigate('Router', {
                             team_id: response.data,
+                            admin: state.token,
+                            team_name: Title,
                           });
                           //alert("User registered successfully.");
                         })

@@ -58,26 +58,7 @@ export default function Router({route, navigation}) {
   const [leaveTeam, setleaveTeam] = useState(false);
   const [deleTeam, setdeleTeam] = useState(false);
   const [addmemVisible, setaddmemVisible] = useState(false);
-  const [addMembers, onChangeaddMembers] = React.useState([
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-    {data: 'devansh_j@cs.iitr.ac.in'},
-  ]);
+  const [addMembers, onChangeaddMembers] = React.useState([]);
   const [text, onChangeText] = React.useState('');
   const [Members, onChangeMembers] = React.useState([]);
   return (
@@ -108,12 +89,21 @@ export default function Router({route, navigation}) {
   );
 }
 
-const storeData = ({addMembers, onChangeaddMembers, text}) => {
-  onChangeaddMembers(addMembers => [...addMembers, {data: text}]);
-};
-
-const deleteText = ({key, addMembers, onChangeaddMembers}) => {
+const deleteText = ({teamId, key, addMembers, onChangeaddMembers}) => {
   var array = [...addMembers];
+  //console.log(array[key].username);
+  axios
+    .delete(
+      `https://simplab-api.herokuapp.com/api/leave-member/${teamId}/${array[key].username}`,
+    )
+    .then(function (response) {
+      console.log("done");
+      //alert("done");
+    })
+    .catch(function (error) {
+      console.log(error);
+      //alert(error);
+    });
   array.splice(key, 1);
   onChangeaddMembers(array);
 };
@@ -183,7 +173,21 @@ const NavBar = ({
                 styles.AddButton,
                 {width: 100, backgroundColor: '#D20000'},
               ]}
-              onPress={() => console.log('hi')}>
+              onPress={() => {
+                axios
+                  .delete(
+                    `https://simplab-api.herokuapp.com/api/delete-team/${teamId}`,
+                  )
+                  .then(function (response) {
+                    //console.log("done");
+                    navigator.push('Home');
+                    alert("Team deleted Successfully");
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    //alert(error);
+                  });
+              }}>
               <Text style={styles.buttonText}>Delete Team</Text>
             </TouchableOpacity>
 
@@ -225,7 +229,21 @@ const NavBar = ({
                 styles.AddButton,
                 {width: 100, backgroundColor: '#D20000'},
               ]}
-              onPress={() => console.log('hi')}>
+              onPress={() => {
+                axios
+                  .delete(
+                    `https://simplab-api.herokuapp.com/api/leave-team/${teamId}/${state.token}`,
+                  )
+                  .then(function (response) {
+                    //console.log("done");
+                    navigator.push('Home');
+                    alert("Team left Successfully");
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    //alert(error);
+                  });
+              }}>
               <Text style={styles.buttonText}>Leave Team</Text>
             </TouchableOpacity>
 
@@ -270,11 +288,11 @@ const NavBar = ({
                     justifyContent: 'space-between',
                     marginTop: 5,
                   }}>
-                  <Text style={styles.ScrollElement}>{item.data}</Text>
+                  <Text style={styles.ScrollElement}>{item.email}</Text>
                   <TouchableOpacity
                     style={{marginRight: 20}}
                     onPress={() =>
-                      deleteText({key, addMembers, onChangeaddMembers})
+                      deleteText({teamId, key, addMembers, onChangeaddMembers})
                     }>
                     <Image style={{marginTop: 10}} source={minus} />
                   </TouchableOpacity>
@@ -286,7 +304,22 @@ const NavBar = ({
           <View style={styles.ButtonContainer}>
             <TouchableOpacity
               style={styles.AddButton}
-              onPress={() => storeData({addMembers, onChangeaddMembers, text})}>
+              onPress={() => {
+                //storeData({addMembers, onChangeaddMembers, text})
+                axios
+                  .put(
+                    `https://simplab-api.herokuapp.com/api/add-member/${teamId}/${text}`,
+                  )
+                  .then(res => {
+                    //console.log(res.data);
+                    setaddmemVisible(false);
+                    alert("Member added successfully!!");
+                  })
+                  .catch(e => {
+                    console.log(e);
+                    alert("Invalid Email!!");
+                  });
+              }}>
               <Text style={styles.buttonText}>ADD</Text>
             </TouchableOpacity>
 
@@ -400,8 +433,17 @@ const NavBar = ({
               onPress={() => {
                 //setShowJoinTeam(true);
                 //setShowCreateTeam(false);
-                setaddmemVisible(true);
-                _menu.hide();
+                axios
+                .get(`https://simplab-api.herokuapp.com/api/students/${teamId}`)
+                .then(async res => {
+                  //const dat = res.data;
+                  //setList(res.data);
+                  onChangeaddMembers(res.data);
+                  //console.log(res.data);
+                  setaddmemVisible(true);
+                  _menu.hide();
+                })
+                .catch(err => console.log(err));
               }}>
               <Image
                 style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}
@@ -498,10 +540,17 @@ const NavBar = ({
             <MenuItem
               style={{marginLeft: 0}}
               onPress={() => {
-                //setShowJoinTeam(false);
-                //setShowCreateTeam(true);
-                setmemVisible(true);
-                _menu.hide();
+                axios
+                .get(`https://simplab-api.herokuapp.com/api/students/${teamId}`)
+                .then(async res => {
+                  const dat = res.data;
+                  //setList(res.data);
+                  onChangeMembers(res.data);
+                  //console.log(res.data);
+                  setmemVisible(true);
+                  _menu.hide();
+                })
+                .catch(err => console.log(err));
               }}>
               <Image
                 style={{marginBottom: 20, marginTop: 49, marginLeft: 10}}

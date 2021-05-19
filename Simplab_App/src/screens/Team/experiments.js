@@ -26,81 +26,62 @@ import {Context as AuthContext} from '../../context/AuthContext';
 import {TextInput} from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 
-const DATA = [
-  {
-    key: '1',
-    title: 'Assigned',
-    data: [
-      {
-        expNo: 5,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: false,
-      },
-    ],
-  },
-  {
-    key: '2',
-    title: 'Previous',
-    data: [
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: true,
-      },
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        submissions: '24/30',
-        isComplete: true,
-      },
-    ],
-  },
-];
-
 const exp = [
   {
-    value: 'Magnetic Field Lines in a coil',
+    value: 'Electric Field of Point Charge',
   },
   {
-    value: 'Electromagnetic Current',
+    value: 'Ohm\'s Law',
   },
   {
-    value: 'Travelling Microscope',
+    value: 'Hooke\'s Law',
   },
   {
-    value: 'Torque',
+    value: 'Faraday\'s Law',
+  },
+  {
+    value: 'Waves Interference',
+  },
+  {
+    value: 'Capacitor LAB',
+  },
+  {
+    value: 'Projectile Motion',
+  },
+  {
+    value: 'Rutherford Scattering',
   },
 ];
 
 const Item = ({item, admin, token}) => (
   <View style={styles.item}>
-    <Text style={styles.expNo}>Experiment {item.expNo}</Text>
-    <Text style={styles.expHeading}>{item.expHeading}</Text>
+    <Text style={styles.expNo}>Experiment {item.exp}</Text>
+    <Text style={styles.expHeading}>{item.title}</Text>
     {token == admin ? (
-      <Text style={styles.submissions}>Submissions: {item.submissions}</Text>
+      <Text style={styles.submissions}>View Submissions</Text>
     ) : null}
-    <Text style={item.isComplete ? styles.dueDate : styles.dueDateOrange}>
-      Due {item.dueDate}
+    <Text style={styles.dueDateOrange}>
+      Due: {' '} {item.due_date}{'  '}{item.due_time}
     </Text>
   </View>
 );
 
-export default function Experiments({navigation, admin}) {
+export default function Experiments({navigation, admin, team_id}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
   const [showeditAssign, setshoweditAssign] = useState(false);
   const [Assign, setAssign] = useState(false);
+  const [ready, setReady] = useState([]);
+  const [istrue,setTrue] = useState('0');
+  const [DATA, setDATA] = useState([]);
   const {state} = useContext(AuthContext);
   const [Date, onChangeDate] = React.useState('2016-05-15');
-  const [text, onChangeText] = React.useState('');
+  const [text, onChangeText] = React.useState(0);
   const [item, setItem] = React.useState('Magnetic field Lines in a coil');
+  const [val, setVal] = React.useState('Magnetic field Lines in a coil');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [time, setTime] = React.useState('23:59');
+  const [time, setTime] = React.useState('11:59');
+  const [vartime, setvarTime] = React.useState('');
   const options = [
     {label: 'AM', value: '0'},
     {label: 'PM', value: '1'},
@@ -140,6 +121,32 @@ export default function Experiments({navigation, admin}) {
     console.log(time);
     hideDatePicker();
   };
+
+  useEffect(() => {
+    assign_list();
+  });
+
+  async function assign_list() {
+    await axios
+      .get(`https://simplab-api.herokuapp.com/api/assignments/${team_id}`)
+      .then(res => {
+        setDATA(res.data);
+        //setReady(true);
+      })
+      .catch(err => console.log(err));
+  }
+
+  function edit_assign(id){
+    axios
+      .get(`https://simplab-api.herokuapp.com/api/get-assignment-detail/${id}`)
+      .then(res => {
+        setReady(res.data);
+        setshoweditAssign(true);
+        //setDATA(res.data);
+        //setReady(true);
+      })
+      .catch(err => console.log(err));
+  }
 
   return (
     <View style={styles.container}>
@@ -282,7 +289,7 @@ export default function Experiments({navigation, admin}) {
                   buttonColor={'#F37A27'}
                   backgroundColor={'#000000'}
                   textColor={'#fff'}
-                  //onPress={value => console.log(`Call onPress with value: ${value}`)}
+                  onPress={value => setTrue(value)}
                 />
               </View>
             </TouchableOpacity>
@@ -309,29 +316,35 @@ export default function Experiments({navigation, admin}) {
             <RNPickerSelect
               style={{width: 100}}
               placeholder={{
-                label: 'Magnetic field Lines in a coil',
-                value: 'Magnetic field Lines in a coil',
+                label: 'Electric Field of Point Charge',
+                value: 'Electric Field of Point Charge',
                 color: '#CACACA',
               }}
-              onValueChange={value => setItem(value)}
+              onValueChange={(value, index) => {
+                setItem((index+1)),
+                setVal(value);
+              }}
               items={[
                 {
-                  label: 'Electromagnetic Current',
-                  value: 'Electromagnetic Current',
+                  label: 'Ohm\'s Law',
+                  value: 'Ohm\'s Law',
                   color: '#CACACA',
                 },
                 {
-                  label: 'Travelling Microscope',
-                  value: 'Travelling Microscope',
+                  label: 'Hooke\'s Law',
+                  value: 'Hooke\'s Law',
                   color: '#CACACA',
                 },
                 {label: 'Torque', value: 'Torque', color: '#CACACA'},
                 {
-                  label: 'Placks Constant',
-                  value: 'Placks Constant',
+                  label: 'Faraday\'s Law',
+                  value: 'Faraday\'s Law',
                   color: '#CACACA',
                 },
-                {label: 'Stokes Law', value: 'Stokes Law', color: '#CACACA'},
+                {label: 'Waves Interference', value: 'Waves Interference', color: '#CACACA'},
+                {label: 'Capacitor LAB', value: 'Capacitor LAB', color: '#CACACA'},
+                {label: 'Projectile Motion', value: 'Projectile Motion', color: '#CACACA'},
+                {label: 'Rutherford Scattering', value: 'Rutherford Scattering', color: '#CACACA'},
               ]}>
               <View
                 style={{
@@ -352,7 +365,7 @@ export default function Experiments({navigation, admin}) {
                     marginLeft: 20,
                     marginTop: 30,
                   }}>
-                  {item}
+                  {val}
                 </Text>
                 <Image
                   source={arrowDown}
@@ -368,7 +381,37 @@ export default function Experiments({navigation, admin}) {
           <View style={[styles.ButtonContainer, {marginTop: 70}]}>
             <TouchableOpacity
               style={styles.AddButton}
-              onPress={() => console.log('hi')}>
+              onPress={() => {
+                //console.log('hi')
+                if(istrue=='1'){
+                  var x = time.substring(0,2);
+                  var y = parseInt(x, 10);
+                  y += 12;
+                  var z = y.toString();
+                  setvarTime(z+time.substring(2,5)+':00');
+                }else{
+                  setvarTime(time+':00');
+                }
+                //console.log(vartime);
+                axios
+                  .post(
+                    'https://simplab-api.herokuapp.com/api/create_assignment',
+                    {
+                      team: team_id,
+                      title: text,
+                      due_date: Date,
+                      exp: item,
+                      due_time: vartime,
+                    },
+                  )
+                  .then(function (response) {
+                    alert("User registered successfully.");
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    //alert(error);
+                  });
+              }}>
               <Text style={styles.buttonText}>Assign</Text>
             </TouchableOpacity>
 
@@ -389,7 +432,7 @@ export default function Experiments({navigation, admin}) {
               fontWeight: '700',
               marginTop: 12,
             }}>
-            Experiment-4
+            Experiment- {ready.exp}
           </Text>
           <Text
             style={{
@@ -398,7 +441,7 @@ export default function Experiments({navigation, admin}) {
               fontWeight: '700',
               marginTop: 12,
             }}>
-            Magnetic Field lines in coil
+            {ready.title}
           </Text>
           <TouchableOpacity
             style={styles.crossimage}
@@ -439,7 +482,7 @@ export default function Experiments({navigation, admin}) {
                 color: '#fff !important',
                 backgroundColor: '#000',
               }}
-              date={Date}
+              date={ready.due_date}
               mode="date"
               placeholder="Select date"
               format="YYYY-MM-DD"
@@ -486,7 +529,7 @@ export default function Experiments({navigation, admin}) {
                   fontWeight: '700',
                   fontSize: 15,
                 }}>
-                {time}
+                {ready.due_time}
               </Text>
               <View style={{width: 60, marginRight: 5, alignSelf: 'center'}}>
                 <SwitchSelector
@@ -501,7 +544,6 @@ export default function Experiments({navigation, admin}) {
                   buttonColor={'#F37A27'}
                   backgroundColor={'#000000'}
                   textColor={'#fff'}
-                  //onPress={value => console.log(`Call onPress with value: ${value}`)}
                 />
               </View>
             </TouchableOpacity>
@@ -551,58 +593,29 @@ export default function Experiments({navigation, admin}) {
           </ScrollView>
         </View>
       </Modal>
-
-      <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({item}) => {
-          return item.isComplete ? (
-            isCompletedOpen ? (
-              <TouchableOpacity
+      
+      <ScrollView style={{marginTop:20}}>
+        
+        {DATA.map((item, index) => {
+          return (
+            <TouchableOpacity
+                key={index}
                 onPress={() => {
+                  //console.log(index);
                   admin != state.token
                     ? navigation.navigate('ExperimentDetail')
-                    : setshoweditAssign(true);
+                    : (
+                      //setshoweditAssign(true)
+                      //console.log(item.id)
+                      edit_assign(item.id)
+                      );
                 }}>
                 <Item item={item} admin={admin} token={state.token} />
               </TouchableOpacity>
-            ) : null
-          ) : isAssignedOpen ? (
-            <TouchableOpacity
-              onPress={() => {
-                admin != state.token
-                  ? navigation.navigate('ExperimentDetail')
-                  : setshoweditAssign(true);
-              }}>
-              <Item item={item} admin={admin} token={state.token} />
-            </TouchableOpacity>
-          ) : null;
-        }}
-        renderSectionHeader={({section: {title}}) => {
-          const imgsrc =
-            title === 'Assigned'
-              ? isAssignedOpen
-                ? arrowUp
-                : arrowDown
-              : isCompletedOpen
-              ? arrowUp
-              : arrowDown;
-          return (
-            <View>
-              <TouchableOpacity
-                style={styles.headericon}
-                onPress={() => {
-                  title === 'Assigned'
-                    ? onChangeAssignedOpen(!isAssignedOpen)
-                    : onChangeCompletedOpen(!isCompletedOpen);
-                }}>
-                <Image style={{top: 8}} source={imgsrc} />
-              </TouchableOpacity>
-              <Text style={styles.headertext}>{title}</Text>
-            </View>
           );
-        }}
-      />
+        })}
+      </ScrollView>
+      
       {admin == state.token ? (
         <TouchableOpacity style={styles.addBtn} onPress={() => setAssign(true)}>
           <Image source={add} />

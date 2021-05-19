@@ -31,6 +31,7 @@ export default function Teams({navigation}) {
   let _menu = null;
   
   useEffect(() => {
+    console.log(state)
     team_list();
   }, [ShowCreateTeam, ShowJoinTeam]);
 

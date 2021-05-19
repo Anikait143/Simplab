@@ -25,7 +25,7 @@ export default function Dropdownelement(props) {
 
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20}}>
 
-                <Text style={{color:'#AAAAAA',fontSize:14,marginTop:5}}>Submitted : 7:55 pm 25/04</Text>
+                <Text style={{color:'#AAAAAA',fontSize:14,marginTop:5}}>Submitted : {props.date} {' '} {props.time.substring(0,5)}</Text>
 
                 <TouchableOpacity><Image source={Download}/></TouchableOpacity>
                 </View>

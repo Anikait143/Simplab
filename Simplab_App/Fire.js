@@ -7,6 +7,7 @@ class Fire {
   }
   init = () => {
     if (!firebase.apps.length) {
+      console.log('insidde auth firebase');
       firebase.initializeApp({
         apiKey: 'AIzaSyC6EjthZqJ1WVJKPo-2SJEjfXIgwZ2y6iU',
         authDomain: 'simplab-f8e52.firebaseapp.com',
@@ -27,28 +28,38 @@ class Fire {
     });
   };
 
-  send = messages => {
-    messages.forEach(item => {
-      const message = {
-        text: item.text,
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-        user: item.user,
-      };
-
-      this.db.push(message);
-    });
+  send = msg => {
+    this.db.push(msg);
   };
 
-  parse = message => {
-    const {user, text, timestamp} = message.val();
-    const {key: _id} = message;
-    const createdAt = new Date(timestamp);
+  parse = msg => {
+    const {
+      date,
+      sent_time,
+      sender_name,
+      sender_profile,
+      message,
+      is_file,
+      chat_file,
+      team,
+      sender,
+      // timestamp,
+    } = msg.val();
+
+    const {key: _id} = msg;
+    // const createdAt = new Date(timestamp);
 
     return {
       _id,
-      createdAt,
-      text,
-      user,
+      date,
+      sent_time,
+      sender_name,
+      sender_profile,
+      message,
+      is_file,
+      chat_file,
+      team,
+      sender,
     };
   };
 

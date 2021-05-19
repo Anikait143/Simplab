@@ -1,4 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {Context as AuthContext} from '../../context/AuthContext';
+import DocumentPicker from 'react-native-document-picker';
+import axios from 'axios';
 import {
   StyleSheet,
   View,
@@ -15,50 +18,21 @@ import send_button from './TeamAssets/send_button.png';
 import attach from './TeamAssets/attach.png';
 import download from './TeamAssets/download.png';
 import file from './TeamAssets/file.png';
-import Fire from '../../../Fire'
-
-const DATA = [
-  {
-    key: '1',
-    type: 'txt',
-    msg:
-      'koi jo mila to mujhe aesa lagta tha jaise meri sari duniya mein geeto ki rut aur rango ki barkha hai, khushbu ki aandhi hai..mehki hui si ab saari fizaaaye hai, behki hui si ab saari hawayein hai...',
-    name: 'Anshika',
-    date: '25 Apr',
-    time: '10:00',
-  },
-  {
-    key: '2',
-    type: 'txt',
-    msg:
-      'koi jo mila to mujhe aesa lagta tha jaise meri sari duniya mein geeto ki rut aur rango ki barkha hai, khushbu ki aandhi hai..mehki hui si ab saari fizaaaye hai, behki hui si ab saari hawayein hai...',
-    name: 'Anshika',
-    date: '25 Apr',
-    time: '10:00',
-  },
-  {
-    key: '3',
-    type: 'pdf',
-    name: 'Anshika',
-    file_name: 'ques.pdf',
-    date: '25 Apr',
-    time: '10:00',
-  },
-];
+import Fire from '../../../Fire';
 
 const MsgTile = ({item}) => (
   <View style={styles.item}>
     <View style={{paddingLeft: 10, paddingBottom: 10}}>
-      <Image
-        style={{top: 10, left: 0, alignSelf: 'flex-start'}}
-        source={avatar}
-      />
+      {/* <Image
+        source={{uri: `https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg`}}
+        style={{top: 10, left: 0, alignSelf: 'flex-start', height: 10}}
+      /> */}
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.time}>
         {item.date}, {item.time}
       </Text>
     </View>
-    {item.type === 'txt' ? (
+    {!item.isFile ? (
       <Text style={styles.msg}>{item.msg}</Text>
     ) : (
       <FileTile item={item} />
@@ -83,23 +57,167 @@ const FileTile = ({item}) => (
       style={{bottom: 15, right: 0, alignSelf: 'flex-end'}}
       source={download}
     />
-    <Text style={styles.file_name}>{item.file_name}</Text>
+    <Text style={styles.file_name}>
+      {item.file_name.substr(item.file_name.search('files') + 6)}
+    </Text>
   </View>
 );
 
-export default function Chats({navigation}) {
+export default function Chats({navigation, team_id, team_name}) {
   const [msg, onChangeMsg] = useState('');
+  const [chats, onChangeChats] = useState([]);
+  const [chatsRTC, setRTCChats] = useState([]);
+  const {state} = useContext(AuthContext);
+  const [singleFile, setSingleFile] = React.useState(null);
+
+  useEffect(() => {
+    Fire.get(element => {
+      if (element.team === team_id)
+        onChangeChats(oldChats => [
+          ...oldChats,
+          {
+            key: element._id,
+            isFile: element.is_file,
+            msg: element.message,
+            name: element.sender_name,
+            time: element.sent_time,
+            date: element.date,
+            profile: element.sender_profile,
+            file_name: element.chat_file,
+          },
+        ]);
+    });
+    getChats();
+    return () => {
+      Fire.off();
+    };
+  }, []);
+
+  const selectFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+        // There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
+      });
+      // Printing the log realted to the file
+      // Setting the state to show single file attributes
+      setSingleFile(res);
+    } catch (err) {
+      setSingleFile(null);
+      // Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        // If user canceled the document selection
+        alert('Canceled');
+      } else {
+        // For Unknown Error
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
+  };
+
+  const sendRTC = () => {
+    Fire.send({
+      team: team_id,
+      is_file: singleFile ? true : false,
+      message: msg,
+      sender_name: state.username,
+      sent_time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      date: new Date().toISOString().slice(0, 10),
+      sender_profile: state.profile_image,
+      chat_file: singleFile
+        ? {
+            uri: singleFile.uri,
+            name: singleFile.name,
+            type: singleFile.type,
+          }
+        : null,
+    });
+  };
+
+  async function postChat() {
+    sendRTC();
+
+    let form_data = new FormData();
+    form_data.append('date', new Date().toISOString().slice(0, 10));
+    form_data.append('message', msg);
+    form_data.append('is_file', singleFile ? true : false);
+    form_data.append('sender', state.token);
+    form_data.append('sender_name', state.username);
+    form_data.append('sender_profile', state.profile_image);
+    form_data.append('team', team_id);
+    if (singleFile)
+      form_data.append('chat_file', {
+        uri: singleFile.uri,
+        name: singleFile.name,
+        type: singleFile.type,
+      });
+    form_data.append(
+      'sent_time',
+      new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    );
+    await axios
+      .post(`https://simplab-api.herokuapp.com/api/post-chat/`, form_data, {
+        headers: {
+          type: 'multipart/form-data',
+        },
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  function getChats() {
+    axios
+      .get(`https://simplab-api.herokuapp.com/api/chat/${team_id}`)
+      .then(res => {
+        const temp = [];
+        res.data.forEach(element => {
+          temp.push({
+            key: element.id,
+            isFile: element.is_file,
+            msg: element.message,
+            name: element.sender_name,
+            time: element.sent_time,
+            date: element.date,
+            profile: element.sender_profile,
+            file_name: element.chat_file,
+          });
+        });
+        onChangeChats(temp);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
   return (
     <View style={styles.container}>
       <View style={{width: '100%', flex: 1}}>
         <FlatList
-          data={DATA}
+          data={chats}
           renderItem={({item}) => <MsgTile item={item} />}
         />
       </View>
-      <TouchableOpacity onPress={() => {}}>
-        <Image style={styles.send_button} source={send_button} />
+      <TouchableOpacity
+        style={styles.send_button}
+        onPress={() => {
+          postChat();
+          onChangeMsg('');
+        }}>
+        <Image source={send_button} />
       </TouchableOpacity>
       <TextInput
         style={styles.input}
@@ -107,11 +225,11 @@ export default function Chats({navigation}) {
         value={msg}
         placeholder="Type a message"
       />
-      <TouchableOpacity onPress={() => {}}>
-        <Image style={styles.smiley} source={smiley} />
+      <TouchableOpacity style={styles.smiley} onPress={() => {}}>
+        <Image source={smiley} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}}>
-        <Image style={styles.attach} source={attach} />
+      <TouchableOpacity style={styles.attach} onPress={selectFile}>
+        <Image source={attach} />
       </TouchableOpacity>
     </View>
   );

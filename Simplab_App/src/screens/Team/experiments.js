@@ -1,5 +1,4 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {Touchable} from 'react-native';
 import {
   StyleSheet,
   SectionList,
@@ -13,45 +12,14 @@ import {
 import axios from 'axios';
 import add from './TeamAssets/add.png';
 import arrowDown from './TeamAssets/arrowDown.png';
-import arrowUp from './TeamAssets/arrowUp.png';
 import cross from './TeamAssets/close.png';
 import DatePicker from 'react-native-datepicker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Dropdownelement from './dropdownelement';
 import Moment from 'moment';
-import SwitchSelector from 'react-native-switch-selector';
-import ExperimentDetail from '../ExperimentDetail/ExperimentDetail';
-import {createStackNavigator} from '@react-navigation/stack';
 import {Context as AuthContext} from '../../context/AuthContext';
 import {TextInput} from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
-
-const exp = [
-  {
-    value: 'Electric Field of Point Charge',
-  },
-  {
-    value: 'Ohm\'s Law',
-  },
-  {
-    value: 'Hooke\'s Law',
-  },
-  {
-    value: 'Faraday\'s Law',
-  },
-  {
-    value: 'Waves Interference',
-  },
-  {
-    value: 'Capacitor LAB',
-  },
-  {
-    value: 'Projectile Motion',
-  },
-  {
-    value: 'Rutherford Scattering',
-  },
-];
 
 const Item = ({item, admin, token}) => (
   <View style={styles.item}>
@@ -61,7 +29,9 @@ const Item = ({item, admin, token}) => (
       <Text style={styles.submissions}>View Submissions</Text>
     ) : null}
     <Text style={styles.dueDateOrange}>
-      Due: {' '} {item.due_date}{'  '}{item.due_time}
+      Due: {item.due_date}
+      {'  '}
+      {item.due_time}
     </Text>
   </View>
 );
@@ -71,28 +41,23 @@ export default function Experiments({navigation, admin, team_id}) {
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
   const [showeditAssign, setshoweditAssign] = useState(false);
   const [Assign, setAssign] = useState(false);
-  const [ready, setReady] = useState([]);
-  const [istrue,setTrue] = useState([]);
   const [DATA, setDATA] = useState([]);
   const {state} = useContext(AuthContext);
-  const [Date, onChangeDate] = React.useState('2016-05-15');
-  const [text, onChangeText] = React.useState(0);
-  const [item, setItem] = React.useState('Electric Field of Point Charge');
-  const [val, setVal] = React.useState('Electric Field of Point Charge');
+  var datenow = new Date().toISOString().slice(0, 10);
+  const [datecal, onChangeDate] = React.useState(datenow);
+  const [text, onChangeText] = React.useState('');
+  const [val, setVal] = React.useState('Click to select an experiment');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [time, setTime] = React.useState('11:59');
-  const [vartime, setvarTime] = React.useState('');
-  const [temp, setTemp] = React.useState(false);
-  const [temp2, setTemp2] = React.useState(false);
-  const [temp1, setTemp1] = React.useState(0);
-  const [temp3, setTemp3] = React.useState(0);
-  const [time1, setTime1] = React.useState(false);
-  const [Date1, setDate1] = React.useState('');
-  const options = [
-    {label: 'AM', value: '0'},
-    {label: 'PM', value: '1'},
-  ];
-  const [Submission, onChangesubmission] = React.useState([]);
+  const [time, setTime] = React.useState('23:59');
+  const [addAssShow, setAddAssShow] = React.useState(false);
+  const [editAssShow, setEditAssShow] = React.useState(false);
+  const [exp, setExp] = React.useState(0);
+  const [editAssDate, setEditAssDate] = React.useState('');
+  const [editAssTime, setEditAssTime] = React.useState('');
+  const [editAss, setEditAss] = React.useState({});
+  const [simulations, setSimulations] = React.useState([]);
+
+  const [Submissions, onChangesubmission] = React.useState([]);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -103,56 +68,59 @@ export default function Experiments({navigation, admin, team_id}) {
   };
 
   const handleConfirm = Time => {
-    //console.warn("A date has been picked: ", time);
     setTime(Moment(Time).format('HH:mm'));
-    //console.log(time);
-    istrue.due_time = Moment(Time).format('HH:mm');
-    setTime1(true);
     hideDatePicker();
+  };
+
+  const getSimulationList = async () => {
+    await axios
+      .get('https://simplab-api.herokuapp.com/api/simulations/')
+      .then(res => {
+        let arr = [];
+        res.data.map(ele => {
+          arr.push({
+            label: ele.exp_name,
+            value: ele.id,
+            key: ele.id,
+            color: '#CACACA',
+          });
+        });
+        setSimulations(arr);
+        setAddAssShow(true)
+      })
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {
     assign_list();
-  }, [temp,temp2]);
+  }, [addAssShow, editAssShow]);
 
   async function assign_list() {
     await axios
       .get(`https://simplab-api.herokuapp.com/api/assignments/${team_id}`)
       .then(res => {
         setDATA(res.data);
-        //setReady(true);
       })
       .catch(err => console.log(err));
   }
 
-  function edit_assign(id, item, key){
-    axios
-      .get(`https://simplab-api.herokuapp.com/api/get-assignment-detail/${id}`)
+  async function edit_assign(id, item) {
+    setEditAssShow(true);
+    // showeditAssign(true)
+    setEditAss(item);
+    setEditAssDate(item.due_date)
+    setEditAssTime(item.due_time)
+    await axios
+      .get(`https://simplab-api.herokuapp.com/api/submissions-list/${id}`)
       .then(res => {
-        axios
-          .get(`https://simplab-api.herokuapp.com/api/submissions-list/${id}`)
-          .then(res1 => {
-            setReady(res.data);
-            var array = [...DATA]
-            setTrue(array[key]);
-            array.splice(key, 1);
-            //console.log(istrue);
-            //istrue.exp = 1;
-            //console.log(istrue);
-            //setDATA(array);
-            setTemp1(id);
-            setTemp3(key);
-            onChangesubmission(res1.data);
-            setshoweditAssign(true);
-          })
-          .catch(e => console.log(e));
+        onChangesubmission(res.data);
       })
-      .catch(err => console.log(err));
+      .catch(e => console.log(e));
   }
 
   return (
     <View style={styles.container}>
-      <Modal animationType="slide" transparent={true} visible={Assign}>
+      <Modal animationType="slide" transparent={true} visible={addAssShow}>
         <View style={styles.PopupContainer}>
           <Text
             style={{
@@ -178,7 +146,7 @@ export default function Experiments({navigation, admin, team_id}) {
           <TextInput
             onChangeText={text => onChangeText(text)}
             value={text}
-            placeholder="Enter title"
+            placeholder="Title for your Assignment"
             placeholderTextColor="#939393"
             style={{
               backgroundColor: '#1E2326',
@@ -192,7 +160,7 @@ export default function Experiments({navigation, admin, team_id}) {
             }}></TextInput>
           <TouchableOpacity
             style={styles.crossimage}
-            onPress={() => setAssign(false)}>
+            onPress={() => setAddAssShow(false)}>
             <Image source={cross} />
           </TouchableOpacity>
 
@@ -229,11 +197,11 @@ export default function Experiments({navigation, admin, team_id}) {
                 color: '#fff !important',
                 backgroundColor: '#000',
               }}
-              date={Date}
+              date={datecal}
               mode="date"
               placeholder="Select date"
               format="YYYY-MM-DD"
-              minDate="2016-05-01"
+              minDate={datenow}
               maxDate="2022-06-01"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
@@ -301,37 +269,14 @@ export default function Experiments({navigation, admin, team_id}) {
             </Text>
             <RNPickerSelect
               style={{width: 100}}
-              onValueChange={(value, index) => {
-                setItem((index)),
-                setVal(value);
+              onValueChange={id => {
+                setExp(id);
+                let val = simulations.find(ele => {
+                  return ele.value == id;
+                });
+                setVal(val.label);
               }}
-              items={[
-                {
-                  label: 'Electric Field of Point Charge',
-                  value: 'Electric Field of Point Charge',
-                  color: '#CACACA',
-                },
-                {
-                  label: 'Ohm\'s Law',
-                  value: 'Ohm\'s Law',
-                  color: '#CACACA',
-                },
-                {
-                  label: 'Hooke\'s Law',
-                  value: 'Hooke\'s Law',
-                  color: '#CACACA',
-                },
-                {label: 'Torque', value: 'Torque', color: '#CACACA'},
-                {
-                  label: 'Faraday\'s Law',
-                  value: 'Faraday\'s Law',
-                  color: '#CACACA',
-                },
-                {label: 'Waves Interference', value: 'Waves Interference', color: '#CACACA'},
-                {label: 'Capacitor LAB', value: 'Capacitor LAB', color: '#CACACA'},
-                {label: 'Projectile Motion', value: 'Projectile Motion', color: '#CACACA'},
-                {label: 'Rutherford Scattering', value: 'Rutherford Scattering', color: '#CACACA'},
-              ]}>
+              items={simulations}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -368,28 +313,23 @@ export default function Experiments({navigation, admin, team_id}) {
             <TouchableOpacity
               style={styles.AddButton}
               onPress={() => {
-                //console.log('hi')
-                setvarTime(time+':00');
-                console.log(vartime, team_id, Date, item, text);
+                console.log('time now', time);
                 axios
                   .post(
                     'https://simplab-api.herokuapp.com/api/create_assignment/',
                     {
                       team: team_id,
                       title: text,
-                      due_date: Date,
-                      exp: item,
-                      due_time: vartime,
+                      due_date: datecal,
+                      exp: exp,
+                      due_time: time,
                     },
                   )
                   .then(function (response) {
-                    //alert("User registered successfully.");
-                    setAssign(false);
-                    setTemp2(!temp2);
+                    setAddAssShow(false)
                   })
                   .catch(function (error) {
                     console.log(error);
-                    //alert(error);
                   });
               }}>
               <Text style={styles.buttonText}>Assign</Text>
@@ -397,13 +337,13 @@ export default function Experiments({navigation, admin, team_id}) {
 
             <TouchableOpacity
               style={styles.cancelButton}
-              onPress={() => setAssign(false)}>
+              onPress={() => setAddAssShow(false)}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <Modal animationType="slide" transparent={true} visible={showeditAssign}>
+      <Modal animationType="slide" transparent={true} visible={editAssShow}>
         <View style={styles.PopupContainer}>
           <Text
             style={{
@@ -412,7 +352,7 @@ export default function Experiments({navigation, admin, team_id}) {
               fontWeight: '700',
               marginTop: 12,
             }}>
-            Experiment- {ready.exp}
+            Experiment - {editAss.exp}
           </Text>
           <Text
             style={{
@@ -421,12 +361,12 @@ export default function Experiments({navigation, admin, team_id}) {
               fontWeight: '700',
               marginTop: 12,
             }}>
-            {ready.title}
+            {editAss.title}
           </Text>
           <TouchableOpacity
             style={styles.crossimage}
             onPress={() => {
-              setshoweditAssign(false)
+              setEditAssShow(false)
             }}>
             <Image source={cross} />
           </TouchableOpacity>
@@ -464,11 +404,11 @@ export default function Experiments({navigation, admin, team_id}) {
                 color: '#fff !important',
                 backgroundColor: '#000',
               }}
-              date={istrue.due_date}
+              date={editAssDate}
               mode="date"
               placeholder="Select date"
               format="YYYY-MM-DD"
-              minDate="2016-05-01"
+              minDate={datenow}
               maxDate="2022-06-01"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
@@ -487,11 +427,9 @@ export default function Experiments({navigation, admin, team_id}) {
                   borderColor: '#000',
                 },
                 dateText: {color: '#fff'},
-                // ... You can check the source to find the other keys.
               }}
               onDateChange={date => {
-                  istrue.due_date = date;
-                  setDate1(date);
+                setEditAssDate(date);
               }}
             />
 
@@ -512,13 +450,16 @@ export default function Experiments({navigation, admin, team_id}) {
                   fontWeight: '700',
                   fontSize: 15,
                 }}>
-                {istrue.due_time}
+                {editAssTime}
               </Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="time"
-              onConfirm={handleConfirm}
+              onConfirm={Time => {
+                setEditAssTime(Moment(Time).format('HH:mm'));
+                setDatePickerVisibility(false)
+              }}
               onCancel={hideDatePicker}
             />
           </View>
@@ -526,22 +467,17 @@ export default function Experiments({navigation, admin, team_id}) {
           <View style={styles.ButtonContainer}>
             <TouchableOpacity
               style={styles.AddButton}
-              onPress={() => {
-                axios
+              onPress={async () => {
+                await axios
                   .put(
-                    `https://simplab-api.herokuapp.com/api/edit/assignment-detail/${temp1}`,
+                    `https://simplab-api.herokuapp.com/api/edit/assignment-detail/${editAss.id}`,
                     {
-                      due_date: istrue.due_date,
-                      due_time: time,                   
-                    }
+                      due_date: editAssDate,
+                      due_time: editAssTime,
+                    },
                   )
                   .then(res => {
-                    console.log(res.data);
-                    DATA[temp3].due_time = istrue.due_time;
-                    DATA[temp3].due_date = istrue.due_date;
-                    console.log(DATA);
-                    setTemp(!temp);
-                    setshoweditAssign(false)
+                    setEditAssShow(false)
                   })
                   .catch(e => {
                     console.log(e);
@@ -553,7 +489,7 @@ export default function Experiments({navigation, admin, team_id}) {
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => {
-                setshoweditAssign(false)
+                setEditAssShow(false);
               }}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
@@ -570,46 +506,41 @@ export default function Experiments({navigation, admin, team_id}) {
           </View>
 
           <ScrollView style={styles.Scrollstyle}>
-            {Submission.map((item, key) => {
+            {Submissions.map(item => {
               return (
                 <Dropdownelement
-                  key={key}
+                  key={item.id}
                   name={item.student_name}
                   emailid={item.student_email}
                   date={item.submission_date}
-                  time = {item.submission_time}
+                  time={item.submission_time}
                 />
               );
             })}
           </ScrollView>
         </View>
       </Modal>
-      
-      <ScrollView style={{marginTop:20}}>
-        
-        {DATA.map((item, index) => {
+
+      <ScrollView style={{marginTop: 20}}>
+        {DATA.map(item => {
           return (
             <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  //console.log(index);
-                  admin != state.token
-                    ? navigation.navigate('ExperimentDetail')
-                    : (
-                      //setshoweditAssign(true)
-                      //console.log(item.id)
-                      setTemp(index),
-                      edit_assign(item.id,item, index)
-                      );
-                }}>
-                <Item item={item} admin={admin} token={state.token} />
-              </TouchableOpacity>
+              key={item.id}
+              onPress={() => {
+                admin != state.token
+                  ? navigation.navigate('ExperimentDetail', {ass_id: item.id})
+                  : edit_assign(item.id, item);
+              }}>
+              <Item item={item} admin={admin} token={state.token} />
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
-      
+
       {admin == state.token ? (
-        <TouchableOpacity style={styles.addBtn} onPress={() => setAssign(true)}>
+        <TouchableOpacity
+          style={styles.addBtn}
+          onPress={() => getSimulationList()}>
           <Image source={add} />
         </TouchableOpacity>
       ) : null}
@@ -622,7 +553,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     color: '#fff',
-    backgroundColor: '#272B2E',
   },
   headericon: {
     alignSelf: 'flex-end',

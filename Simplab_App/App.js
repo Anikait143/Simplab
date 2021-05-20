@@ -5,16 +5,16 @@ import {Provider as AuthProvider} from './src/context/AuthContext';
 import {Context as AuthContext} from './src/context/AuthContext';
 import TourMain from './src/screens/Tour/TourMain';
 import Home from './src/screens/Home/Home';
+import {LogBox} from 'react-native';
 
 const Stack = createStackNavigator();
-
+LogBox.ignoreAllLogs(true);
 function App() {
   const {state, restoreToken} = React.useContext(AuthContext);
 
   React.useEffect(() => {
-    console.log('use Effect');
     restoreToken();
-  },[]);
+  }, []);
 
   return (
     <NavigationContainer>

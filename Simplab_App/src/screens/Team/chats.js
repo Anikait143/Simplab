@@ -5,12 +5,11 @@ import axios from 'axios';
 import {
   StyleSheet,
   View,
-  ImageBackground,
   Text,
-  FlatList,
   Image,
   TextInput,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import avatar from './TeamAssets/avatar.png';
 import smiley from './TeamAssets/smiley.png';
@@ -19,33 +18,37 @@ import attach from './TeamAssets/attach.png';
 import download from './TeamAssets/download.png';
 import file from './TeamAssets/file.png';
 import Fire from '../../../Fire';
-import { AutoScrollFlatList } from 'react-native-autoscroll-flatlist';
+import {AutoScrollFlatList} from 'react-native-autoscroll-flatlist';
+import FastImage from 'react-native-fast-image';
 
-const MsgTile = ({item}) => (
-  <View style={styles.item}>
-    <View style={{paddingLeft: 10, paddingBottom: 10}}>
-      <Image
-        style={{top: 10, left: 0, alignSelf: 'flex-start'}}
-        source={
-          item.profile_image
-            ? {
-                uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
-              }
-            : avatar
-        }
-      />
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.time}>
-        {item.date}, {item.time}
-      </Text>
+const MsgTile = ({item}) => {
+  return (
+    <View style={styles.item}>
+      <View style={{paddingLeft: 10, paddingBottom: 10}}>
+        <Image
+          style={{top: 10, left: 0, alignSelf: 'flex-start'}}
+          source={avatar}
+        />
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.time}>
+          {item.date}, {item.time}
+        </Text>
+      </View>
+      {!item.isFile ? (
+        <Text style={styles.msg}>{item.msg}</Text>
+      ) : (
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              `https://simplab-api.herokuapp.com${item.file_name}`,
+            )
+          }>
+          <FileTile item={item} />
+        </TouchableOpacity>
+      )}
     </View>
-    {!item.isFile ? (
-      <Text style={styles.msg}>{item.msg}</Text>
-    ) : (
-      <FileTile item={item} />
-    )}
-  </View>
-);
+  );
+};
 
 const FileTile = ({item}) => (
   <View
@@ -64,13 +67,7 @@ const FileTile = ({item}) => (
       style={{bottom: 15, right: 0, alignSelf: 'flex-end'}}
       source={download}
     />
-    {item.is_file ? (
-      <Text style={styles.file_name}>
-        {item.file_name.substr(item.file_name.search('files') + 6)}
-      </Text>
-    ) : (
-      <Text></Text>
-    )}
+    <Text style={styles.file_name}>{`${item.file_name}`.substr(18)}</Text>
   </View>
 );
 
@@ -119,6 +116,7 @@ export default function Chats({navigation, team_id, team_name}) {
       // Printing the log realted to the file
       // Setting the state to show single file attributes
       setSingleFile(res);
+      onChangeMsg(res.name);
     } catch (err) {
       setSingleFile(null);
       // Handling any exception (If any)
@@ -133,7 +131,7 @@ export default function Chats({navigation, team_id, team_name}) {
     }
   };
 
-  const sendRTC = () => {
+  const sendRTC = uri => {
     Fire.send({
       team: team_id,
       is_file: singleFile ? true : false,
@@ -145,18 +143,12 @@ export default function Chats({navigation, team_id, team_name}) {
       }),
       date: new Date().toISOString().slice(0, 10),
       sender_profile: state.profile_image,
-      chat_file: singleFile
-        ? {
-            uri: singleFile.uri,
-            name: singleFile.name,
-            type: singleFile.type,
-          }
-        : null,
+      chat_file: uri,
     });
   };
 
   async function postChat() {
-    sendRTC();
+    if (!singleFile) sendRTC(null);
 
     let form_data = new FormData();
     form_data.append('date', new Date().toISOString().slice(0, 10));
@@ -184,6 +176,9 @@ export default function Chats({navigation, team_id, team_name}) {
         headers: {
           type: 'multipart/form-data',
         },
+      })
+      .then(res => {
+        if (singleFile) sendRTC(res.data);
       })
       .catch(e => {
         console.log(e);
@@ -216,10 +211,10 @@ export default function Chats({navigation, team_id, team_name}) {
 
   return (
     <View style={styles.container}>
-      <View style={{width: '100%', flex: 9}}>
+      <View style={{width: '100%', flex: 7}}>
         <AutoScrollFlatList
           data={chats}
-          renderItem={({item}) => <MsgTile item={item} />}
+          renderItem={({item}) => <MsgTile item={item} key={item.key} />}
         />
       </View>
 
@@ -315,11 +310,11 @@ const styles = StyleSheet.create({
   },
   file_name: {
     color: '#FFFFFF',
-    fontSize: 17,
+    // fontSize: 17,
     fontFamily: 'Montserrat',
     fontWeight: 'bold',
     position: 'absolute',
-    top: 12,
-    left: 60,
+    top: 15,
+    left: 45,
   },
 });

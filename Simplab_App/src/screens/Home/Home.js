@@ -1,5 +1,12 @@
-import React from 'react';
-import {StyleSheet, Text, View, Button, Image} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  PermissionsAndroid,
+} from 'react-native';
 //import { createBottomTabNavigator, createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -22,8 +29,8 @@ const Tab = createBottomTabNavigator();
 function HomeTabs() {
   return (
     <Tab.Navigator
-    initialRouteName="Teams"
-    tabBarOptions={{
+      initialRouteName="Teams"
+      tabBarOptions={{
         keyboardHidesTabBar: true,
         style: {
           backgroundColor: 'black',
@@ -115,6 +122,8 @@ function HomeTabs() {
 const RootStack = createStackNavigator();
 
 export default function Home() {
+  useEffect(() => {}, []);
+
   return (
     <RootStack.Navigator screenOptions={{headerShown: false}}>
       <RootStack.Screen name="Home" component={HomeTabs} />

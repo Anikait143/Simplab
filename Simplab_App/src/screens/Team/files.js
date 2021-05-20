@@ -1,32 +1,10 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  ImageBackground,
-  Text,
-  FlatList,
-  Image,
-} from 'react-native';
-import bckImage from './TeamAssets/bckImg.png';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text, FlatList, Image, Linking} from 'react-native';
 import avatar from './TeamAssets/file.png';
 import dots from './TeamAssets/menu-vertical.png';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const DATA = [
-  {
-    key: '1',
-    name: 'guidlines.pdf',
-    size: '25gb',
-    by: 'sandy',
-    date: '25 Apr',
-  },
-  {
-    key: '2',
-    name: 'guidlines.pdf',
-    size: '25gb',
-    by: 'sandy',
-    date: '25 Apr',
-  },
-];
 
 const Tile = ({item}) => (
   <View style={styles.item}>
@@ -38,17 +16,48 @@ const Tile = ({item}) => (
       style={{bottom: 15, right: 0, alignSelf: 'flex-end'}}
       source={dots}
     />
-    <Text style={styles.name}>{item.name}</Text>
+    <Text style={styles.name}>{`${item.chat_file}`.substr(18)}</Text>
     <Text style={styles.details}>
-      {item.size}, Uploaded by{`${item.by}\n${item.date}`}
+      Uploaded by {`${item.sender_name}\n${item.date}`}
     </Text>
   </View>
 );
 
-export default function Chats({navigation}) {
+export default function Chats({team_id, navigation}) {
+  const [DATA, setData] = useState([]);
+
+  const downloadFile = URI => {
+    Linking.openURL(
+      `https://simplab-api.herokuapp.com${URI}`,
+    );
+  };
+
+  useEffect(() => {
+    getFiles();
+    return () => {
+      setData([]);
+    };
+  }, []);
+
+  const getFiles = async () => {
+    await axios
+      .get(`https://simplab-api.herokuapp.com/api/files/${team_id}`)
+      .then(res => setData(res.data))
+      .catch(err => console.log(err));
+  };
+
   return (
     <View style={styles.container}>
-      <FlatList data={DATA} renderItem={({item}) => <Tile item={item} />} />
+      <FlatList
+        data={DATA}
+        renderItem={({item}) => {
+          return (
+            <TouchableOpacity onPress={() => downloadFile(item.chat_file)}>
+              <Tile item={item} />
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 }
@@ -58,7 +67,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     color: '#fff',
-    backgroundColor: '#272B2E',
   },
   item: {
     padding: 15,

@@ -371,7 +371,7 @@ const NavBar = ({
         ]}>
         <TouchableOpacity
           style={{left: 20, top: 5}}
-          onPress={() => navigator.navigate('Home')}>
+          onPress={() => navigator.goBack()}>
           <Image source={back} />
         </TouchableOpacity>
         <Text style={[styles.label, {marginLeft: 10}]}>{label}</Text>
@@ -430,10 +430,10 @@ const NavBar = ({
               </Text>
             </MenuItem>
             <MenuItem
-              onPress={() => {
+              onPress={async () => {
                 //setShowJoinTeam(true);
                 //setShowCreateTeam(false);
-                axios
+                await axios
                 .get(`https://simplab-api.herokuapp.com/api/students/${teamId}`)
                 .then(async res => {
                   //const dat = res.data;

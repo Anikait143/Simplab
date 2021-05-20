@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import SimplabText from '../Home/images/SIMPLAB.png';
@@ -27,11 +28,10 @@ export default function Teams({navigation}) {
   const [Title, onChangeTitle] = React.useState('');
   const [List, setList] = React.useState([]);
   const {state} = useContext(AuthContext);
-  
+
   let _menu = null;
-  
+
   useEffect(() => {
-    console.log(state)
     team_list();
   }, [ShowCreateTeam, ShowJoinTeam]);
 
@@ -177,18 +177,22 @@ export default function Teams({navigation}) {
                   marginTop: 25,
                 }}
                 onPress={() => navigation.navigate('Profile')}>
-                <View>
-                  <Image
-                    source={
-                      state.profile_image
-                        ? {
-                            uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
-                          }
-                        : profphoto
-                    }
-                    style={{height: 70, borderRadius: 50, width: 70}}
-                  />
-                </View>
+                <FastImage
+                  source={
+                    state.profile_image
+                      ? {
+                          uri: `https://simplab-api.herokuapp.com${state.profile_image}`,
+                        }
+                      : profphoto
+                  }
+                  style={{
+                    height: 60,
+                    borderRadius: 50,
+                    width: 60,
+                    borderWidth: 3,
+                    borderColor: 'grey',
+                  }}
+                />
               </TouchableOpacity>
             </View>
             {ShowJoinTeam ? (
@@ -237,12 +241,18 @@ export default function Teams({navigation}) {
                         .then(res => {
                           //console.log(res.data);
                           axios
-                          .get(`https://simplab-api.herokuapp.com/api/team-detail/${Code}`)
-                          .then(res1 => {
-                            setShowJoinTeam(false);
-                            navigation.navigate('Router', {team_id: Code,admin: res1.data.admin,team_name: res1.data.team_name,});
-                          })
-                          .catch(err => console.log(err));
+                            .get(
+                              `https://simplab-api.herokuapp.com/api/team-detail/${Code}`,
+                            )
+                            .then(res1 => {
+                              setShowJoinTeam(false);
+                              navigation.navigate('Router', {
+                                team_id: Code,
+                                admin: res1.data.admin,
+                                team_name: res1.data.team_name,
+                              });
+                            })
+                            .catch(err => console.log(err));
                         })
                         .catch(e => {
                           console.log(e);
@@ -335,7 +345,7 @@ export default function Teams({navigation}) {
                           },
                         )
                         .then(function (response) {
-                          setShowCreateTeam(false)
+                          setShowCreateTeam(false);
                           navigation.navigate('Router', {
                             team_id: response.data,
                             admin: state.token,
@@ -401,8 +411,13 @@ export default function Teams({navigation}) {
                       marginLeft: 10,
                       marginTop: 20,
                     }}
-                    onPress={() => navigation.navigate('Router', {admin: element.admin ,team_id: element.id, team_name: element.team_name})}>
-
+                    onPress={() =>
+                      navigation.navigate('Router', {
+                        admin: element.admin,
+                        team_id: element.id,
+                        team_name: element.team_name,
+                      })
+                    }>
                     <Text
                       style={{
                         marginLeft: 15,
@@ -413,6 +428,7 @@ export default function Teams({navigation}) {
                       }}>
                       {element.team_name}
                     </Text>
+
                     <Image
                       source={pattern}
                       style={{height: 90, width: 100, alignSelf: 'stretch'}}

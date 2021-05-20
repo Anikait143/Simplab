@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   SectionList,
@@ -14,49 +14,20 @@ import Intersect2 from './ExperimentsAssets/intersect2.png';
 import experimentsText from './ExperimentsAssets/expText.png';
 import arrowDown from './ExperimentsAssets/arrowDown.png';
 import arrowUp from './ExperimentsAssets/arrowUp.png';
-
-const DATA = [
-  {
-    title: 'Assigned',
-    data: [
-      {
-        expNo: 5,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        isComplete: false,
-      },
-    ],
-  },
-  {
-    title: 'Completed',
-    data: [
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        isComplete: true,
-      },
-      {
-        expNo: 4,
-        expHeading: 'Mag Field',
-        dueDate: "19 Apr'21 23:59",
-        isComplete: true,
-      },
-    ],
-  },
-];
+import {Context as AuthContext} from '../../context/AuthContext';
+import axios from 'axios';
 
 const Item = ({item}) => (
   <View style={styles.item}>
-    <Text style={styles.expNo}>Experiment {item.expNo}</Text>
-    <Text style={styles.expHeading}>{item.expHeading}</Text>
+    <Text style={styles.expNo}>Experiment {item.exp}</Text>
+    <Text style={styles.expHeading}>{item.title}</Text>
     <Image
       style={{top: 10, left: 0, alignSelf: 'flex-start'}}
       source={Intersect}
     />
     <Image style={{top: -55, alignSelf: 'flex-end'}} source={Intersect2} />
     <Text style={item.isComplete ? styles.dueDate : styles.dueDateOrange}>
-      {item.dueDate}
+      {`Due  ${item.due_date} ${item.due_time}`}
     </Text>
   </View>
 );
@@ -64,6 +35,51 @@ const Item = ({item}) => (
 export default function Experiments({navigation}) {
   const [isAssignedOpen, onChangeAssignedOpen] = React.useState(true);
   const [isCompletedOpen, onChangeCompletedOpen] = React.useState(true);
+  const {state} = useContext(AuthContext);
+  const [DATA, setDATA] = useState([]);
+
+  const get_assignments = async () => {
+    let datenow = new Date().toISOString().slice(0, 10);
+    let timenow = new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    await axios
+      .get(
+        `https://simplab-api.herokuapp.com/api/all-assignments/${state.token}`,
+      )
+      .then(res => {
+        let complete = [];
+        let assigned = [];
+        res.data.map(ass => {
+          if (ass.due_date > datenow && ass.due_time > timenow) {
+            assigned.push({...ass, isComplete: false});
+          } else complete.push({...ass, isComplete: true});
+        });
+        let DATA = [
+          {
+            title: 'Assigned',
+            data: assigned,
+          },
+          {
+            title: 'Completed',
+            data: complete,
+          },
+        ];
+        setDATA(DATA);
+      })
+      .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    get_assignments();
+    return () => {
+      console.log('Cleanup');
+      // setDATA([]);
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -80,13 +96,23 @@ export default function Experiments({navigation}) {
               return item.isComplete ? (
                 isCompletedOpen ? (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('ExperimentDetail')}>
+                    onPress={() =>
+                      navigation.navigate('ExperimentDetail', {
+                        ass_id: item.id,
+                        exp_id: item.exp,
+                      })
+                    }>
                     <Item item={item} />
                   </TouchableOpacity>
                 ) : null
               ) : isAssignedOpen ? (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('ExperimentDetail')}>
+                  onPress={() =>
+                    navigation.navigate('ExperimentDetail', {
+                      ass_id: item.id,
+                      exp_id: item.exp,
+                    })
+                  }>
                   <Item item={item} />
                 </TouchableOpacity>
               ) : null;

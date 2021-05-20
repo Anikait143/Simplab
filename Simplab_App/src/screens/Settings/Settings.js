@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  Linking,
 } from 'react-native';
 import {ceil} from 'react-native-reanimated';
 import bckImage from './SettingsAssets/BackImageSettings.png';
@@ -32,35 +33,41 @@ export default function Settings() {
   const [confPassword, onChangeconfPassword] = React.useState('');
   const [showNotif, onChangeShowNotif] = React.useState(true);
 
-
   const updateUserDetails = async () => {
     await axios
-      .put(`https://simplab-api.herokuapp.com/api/edit/user-detail/${state.token}`, {
-        user: state.token,
-        email: email,
-        organization: organization,
-        contact: contact
-      })
-      .then(()=>{
-        Alert.alert("Success", "Your details have been changed successfully.")
+      .put(
+        `https://simplab-api.herokuapp.com/api/edit/user-detail/${state.token}`,
+        {
+          user: state.token,
+          email: email,
+          organization: organization,
+          contact: contact,
+        },
+      )
+      .then(() => {
+        Alert.alert('Success', 'Your details have been changed successfully.');
       })
       .catch(err => {
-        Alert.alert("Error", "Detail reset request failed")
+        Alert.alert('Error', 'Detail reset request failed');
       });
   };
 
   const updateUserPassword = async () => {
-    if(newPassword !== confPassword) return Alert.alert("Failed", "Confirmation of new password failed.")
+    if (newPassword !== confPassword)
+      return Alert.alert('Failed', 'Confirmation of new password failed.');
     await axios
-      .put(`https://simplab-api.herokuapp.com/api/auth/change-password/${state.token}/${currPassword}`, {
-        username: state.username,
-        password: newPassword
-      })
-      .then(()=>{
-        Alert.alert("Success", "Your password has been changed successfully.")
+      .put(
+        `https://simplab-api.herokuapp.com/api/auth/change-password/${state.token}/${currPassword}`,
+        {
+          username: state.username,
+          password: newPassword,
+        },
+      )
+      .then(() => {
+        Alert.alert('Success', 'Your password has been changed successfully.');
       })
       .catch(err => {
-        Alert.alert("Error", "Password reset request failed")
+        Alert.alert('Error', 'Password reset request failed');
       });
   };
 
@@ -199,7 +206,10 @@ export default function Settings() {
                 style={styles.switch}
               />
             </View>
-            <TouchableOpacity onPress={() => console.log('hi')}>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL('https://github.com/Anikait143/Simplab')
+              }>
               <View style={styles.button}>
                 <Image source={info} style={styles.buttonicon} />
                 <Text style={styles.buttontext}>About us</Text>

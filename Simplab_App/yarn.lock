@@ -7159,6 +7159,11 @@
   dependencies:
     "react-native-raw-bottom-sheet" "^1.0.0"
 
+"react-native-autoscroll-flatlist@^1.10.1":
+  "integrity" "sha512-RpSeiAt81qmvHksw/5UPKbmjN1GKkY1Nu1Vt9ifzsBiXwHEJ9X/0PrARrvG7L2CvZzygZ6e3aYikKjtsDinaFA=="
+  "resolved" "https://registry.npmjs.org/react-native-autoscroll-flatlist/-/react-native-autoscroll-flatlist-1.10.1.tgz"
+  "version" "1.10.1"
+
 "react-native-codegen@^0.0.6":
   "integrity" "sha512-cMvrUelD81wiPitEPiwE/TCNscIVauXxmt4NTGcy18HrUd0WRWXfYzAQGXm0eI87u3NMudNhqFj2NISJenxQHg=="
   "resolved" "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.6.tgz"

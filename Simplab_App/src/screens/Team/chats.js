@@ -19,6 +19,7 @@ import attach from './TeamAssets/attach.png';
 import download from './TeamAssets/download.png';
 import file from './TeamAssets/file.png';
 import Fire from '../../../Fire';
+import { AutoScrollFlatList } from 'react-native-autoscroll-flatlist';
 
 const MsgTile = ({item}) => (
   <View style={styles.item}>
@@ -216,7 +217,7 @@ export default function Chats({navigation, team_id, team_name}) {
   return (
     <View style={styles.container}>
       <View style={{width: '100%', flex: 9}}>
-        <FlatList
+        <AutoScrollFlatList
           data={chats}
           renderItem={({item}) => <MsgTile item={item} />}
         />

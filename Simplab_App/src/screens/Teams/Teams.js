@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import SimplabText from '../Home/images/SIMPLAB.png';
@@ -27,9 +28,9 @@ export default function Teams({navigation}) {
   const [Title, onChangeTitle] = React.useState('');
   const [List, setList] = React.useState([]);
   const {state} = useContext(AuthContext);
-  
+
   let _menu = null;
-  
+
   useEffect(() => {
     team_list();
   }, [ShowCreateTeam, ShowJoinTeam]);
@@ -176,8 +177,8 @@ export default function Teams({navigation}) {
                   marginTop: 25,
                 }}
                 onPress={() => navigation.navigate('Profile')}>
-                <View>
-                  <Image
+                {console.log(state.profile_image)}
+                  <FastImage
                     source={
                       state.profile_image
                         ? {
@@ -187,7 +188,6 @@ export default function Teams({navigation}) {
                     }
                     style={{height: 70, borderRadius: 50, width: 70}}
                   />
-                </View>
               </TouchableOpacity>
             </View>
             {ShowJoinTeam ? (
@@ -392,8 +392,13 @@ export default function Teams({navigation}) {
                       marginLeft: 10,
                       marginTop: 20,
                     }}
-                    onPress={() => navigation.navigate('Router', {admin: element.admin ,team_id: element.id, team_name: element.team_name})}>
-
+                    onPress={() =>
+                      navigation.navigate('Router', {
+                        admin: element.admin,
+                        team_id: element.id,
+                        team_name: element.team_name,
+                      })
+                    }>
                     <Text
                       style={{
                         marginLeft: 15,

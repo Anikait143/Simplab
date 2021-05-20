@@ -88,7 +88,7 @@ export default function Library({navigation}) {
                     marginLeft: 10,
                     marginTop: 20,
                 }}
-                onPress={() =>{navigation.navigate('Experiment',{Id:item.id})}}
+                onPress={() =>{navigation.navigate('Experiment',{ass_id:item.id})}}
                >
                 <Text
                 style={{

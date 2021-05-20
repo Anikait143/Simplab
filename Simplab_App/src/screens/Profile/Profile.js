@@ -10,7 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import FastImage from 'react-native-fast-image';
 import bckImage from '../Settings/SettingsAssets/BackImageSettings.png';
 import addpic from '../Home/images/addpic.png';
 import profpic from '../Home/images/profpic.png';
@@ -74,7 +74,7 @@ export default function Profile({navigation}) {
   };
 
   const uploadImage = async form_data => {
-    console.log('image image')
+    console.log('image image');
     await axios
       .put(
         `https://simplab-api.herokuapp.com/api/edit/user-detail/${state.token}`,
@@ -86,7 +86,10 @@ export default function Profile({navigation}) {
         },
       )
       .then(res => {
-        console.log(res.data)
+        console.log(
+          'this is the response from heroku image',
+          res.data.profile_image,
+        );
         updateProfileImage({...res.data, token: res.data.user});
       })
       .catch(err => console.log(err));
@@ -152,7 +155,7 @@ export default function Profile({navigation}) {
                       backgroundColor: 'white',
                       marginTop: 0,
                     }}>
-                    <Image
+                    <FastImage
                       source={
                         filePath.uri
                           ? {uri: filePath.uri}

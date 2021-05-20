@@ -11,7 +11,7 @@ export default function ExperimentScreen({ route,navigation }) {
   const [result, onChangeResult]  = React.useState('');
   const [singleFile, setSingleFile] = React.useState(null);
 
-  const Id =route.params.Id;
+  const ass_id =route.params.ass_id;
 
   const [Data,onChange]=React.useState([]);
 

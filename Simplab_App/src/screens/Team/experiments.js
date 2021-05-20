@@ -540,7 +540,7 @@ export default function Experiments({navigation, admin, team_id}) {
             <TouchableOpacity
               onPress={() => {
                 admin != state.token
-                  ? navigation.navigate('ExperimentDetail')
+                  ? navigation.navigate('ExperimentDetail', {ass_id: item.id})
                   : setshoweditAssign(true);
               }}>
               <Item item={item} admin={admin} token={state.token} />

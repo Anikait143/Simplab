@@ -11,10 +11,45 @@ import {
 
 import {WebView} from 'react-native-webview';
 import DocumentPicker from 'react-native-document-picker';
+import axios from 'axios';
+import {Context as AuthContext} from '../../context/AuthContext';
 
-export default function ExperimentDetail({navigation}) {
+export default function ExperimentDetail({navigation, route}) {
   const [result, onChangeResult] = React.useState('');
   const [singleFile, setSingleFile] = React.useState({});
+  const {state} = React.useContext(AuthContext);
+
+  const assignment_id = route.params.ass_id;
+
+  const submitAssignment = async () => {
+    console.log('ysyy');
+    if (singleFile) {
+      console.log(singleFile);
+      let form_data = new FormData();
+      form_data.append('student_id', state.token);
+      form_data.append('assignment', assignment_id);
+      form_data.append('student_name', state.username);
+      form_data.append('student_email', state.email);
+      form_data.append('exp_observations_image', {
+        uri: singleFile.uri,
+        name: singleFile.name,
+        type: singleFile.type,
+      });
+      form_data.append('exp_result', result);
+      console.log('inside the sub post ', form_data);
+      await axios
+        .post(
+          'https://simplab-api.herokuapp.com/api/post-assignment-submission/',
+          form_data,
+          {
+            headers: {
+              'content-type': 'multipart/form-data',
+            },
+          },
+        )
+        .catch(err => console.log(err));
+    }
+  };
 
   const selectFile = async () => {
     try {
@@ -103,7 +138,9 @@ export default function ExperimentDetail({navigation}) {
           placeholderTextColor="#9C9C9C"
         />
 
-        <TouchableOpacity style={styles.button} onPress="">
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => submitAssignment()}>
           <Text style={{fontSize: 18, color: '#fff'}}>Submit</Text>
         </TouchableOpacity>
       </ScrollView>

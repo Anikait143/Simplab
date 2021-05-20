@@ -528,7 +528,7 @@ export default function Experiments({navigation, admin, team_id}) {
               key={item.id}
               onPress={() => {
                 admin != state.token
-                  ? navigation.navigate('ExperimentDetail', {ass_id: item.id})
+                  ? navigation.navigate('ExperimentDetail', {ass_id: item.id, exp_id: item.exp})
                   : edit_assign(item.id, item);
               }}>
               <Item item={item} admin={admin} token={state.token} />

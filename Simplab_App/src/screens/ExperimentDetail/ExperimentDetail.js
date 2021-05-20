@@ -17,27 +17,26 @@ import DocumentPicker from 'react-native-document-picker';
 export default function ExperimentScreen({route, navigation}) {
   const [result, onChangeResult] = React.useState('');
   const [singleFile, setSingleFile] = React.useState(null);
-
+  const [loading, setLoading] = React.useState(true);
+  const exp_id = route.params.exp_id;
   const ass_id = route.params.ass_id;
 
   const [Data, onChange] = React.useState([]);
 
   const submitAssignment = async () => {
-    console.log('ysyy');
     if (singleFile) {
       console.log(singleFile);
       let form_data = new FormData();
       form_data.append('student_id', state.token);
-      form_data.append('assignment', assignment_id);
+      form_data.append('assignment', ass_id);
       form_data.append('student_name', state.username);
       form_data.append('student_email', state.email);
-      form_data.append('exp_observations_image', {
+      form_data.append('submission_file', {
         uri: singleFile.uri,
         name: singleFile.name,
         type: singleFile.type,
       });
       form_data.append('exp_result', result);
-      console.log('inside the sub post ', form_data);
       await axios
         .post(
           'https://simplab-api.herokuapp.com/api/post-assignment-submission/',
@@ -55,17 +54,16 @@ export default function ExperimentScreen({route, navigation}) {
   useEffect(() => {
     getData();
   }, []);
+
   const getData = () => {
     axios
-      .get(`https://simplab-api.herokuapp.com/api/simulation/${ass_id}`)
+      .get(`https://simplab-api.herokuapp.com/api/simulation/${exp_id}`)
       .then(res => {
-        const data = res.data;
-        onChange(data);
-        return 1;
+        setLoading(false);
+        onChange(res.data);
       })
       .catch(e => {
         console.log(e);
-        return 0;
       });
   };
 
@@ -98,7 +96,11 @@ export default function ExperimentScreen({route, navigation}) {
       }
     }
   };
-  return (
+  return loading ? (
+    <View style={styles.container}>
+      <Text>Loading...</Text>
+    </View>
+  ) : (
     <View style={styles.container}>
       <View style={{width: '100%', marginBottom: 20}}>
         <View
@@ -162,7 +164,11 @@ export default function ExperimentScreen({route, navigation}) {
             marginLeft: '5%',
             marginTop: 10,
           }}>
-          <WebView source={{uri: `${Data.source}`}} />
+          {Data.source ? (
+            <WebView source={{uri: `${Data.source}`}} />
+          ) : (
+            <Text>Loading your Simulation...</Text>
+          )}
         </View>
         <Text style={styles.textHeading}>Aim</Text>
         <Text style={styles.text}>{Data.aim}</Text>

@@ -77,7 +77,7 @@ export default function Experiments({navigation}) {
     get_assignments();
     return () => {
       console.log('Cleanup');
-      setDATA([]);
+      // setDATA([]);
     };
   }, []);
 
@@ -97,7 +97,10 @@ export default function Experiments({navigation}) {
                 isCompletedOpen ? (
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('ExperimentDetail', {ass_id: item.id})
+                      navigation.navigate('ExperimentDetail', {
+                        ass_id: item.id,
+                        exp_id: item.exp,
+                      })
                     }>
                     <Item item={item} />
                   </TouchableOpacity>
@@ -105,7 +108,10 @@ export default function Experiments({navigation}) {
               ) : isAssignedOpen ? (
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('ExperimentDetail', {ass_id: item.id})
+                    navigation.navigate('ExperimentDetail', {
+                      ass_id: item.id,
+                      exp_id: item.exp,
+                    })
                   }>
                   <Item item={item} />
                 </TouchableOpacity>

@@ -61,7 +61,7 @@ function HomeTabs() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Alerts"
         component={alerts}
         options={{
@@ -78,7 +78,7 @@ function HomeTabs() {
             />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Experiments"
         component={Experiments}

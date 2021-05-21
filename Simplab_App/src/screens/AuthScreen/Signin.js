@@ -61,11 +61,11 @@ export default function Signin({navigation}) {
             onPress={() => signin({username, password})}
           />
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{marginTop: 15, marginBottom: 20}}
             onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={styles.text}>Forgot Password?</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 {/* 
           <Image source={img} />
 

@@ -15,6 +15,7 @@ import Download from './TeamAssets/downloader.png';
 
 export default function Dropdownelement(props) {
   const [Open, onChangeOpen] = React.useState(false);
+  console.log(props, " props")
   return (
     <View style={styles.container}>
       <View

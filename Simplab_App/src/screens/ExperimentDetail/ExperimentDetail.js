@@ -43,7 +43,7 @@ export default function ExperimentDetail({route, navigation}) {
       console.log(form_data);
       await axios
         .post(
-          'https://simplab-api.herokuapp.com/api/post-assignment-submission/',
+          'https://simplab-api.herokuapp.com/api/submit-assignment/',
           form_data,
           {
             headers: {
@@ -52,6 +52,7 @@ export default function ExperimentDetail({route, navigation}) {
           },
         )
         .then(() => {
+          setSingleFile(null);
           Alert.alert(
             'Success',
             'Assignment submited successfully. You can modify your submission till deadline.',
@@ -63,6 +64,10 @@ export default function ExperimentDetail({route, navigation}) {
 
   useEffect(() => {
     getData();
+    return () => {
+      onChange([]);
+      onChangeResult('');
+    };
   }, []);
 
   const getData = () => {

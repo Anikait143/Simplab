@@ -195,7 +195,7 @@ export default function Settings() {
                 Change
               </Text>
             </TouchableOpacity>
-            <Text style={styles.headertext}>Notifications</Text>
+            {/* <Text style={styles.headertext}>Notifications</Text>
             <View style={styles.switchContainer}>
               <Text style={styles.switchText}>Show Notifications</Text>
               <Switch
@@ -205,7 +205,7 @@ export default function Settings() {
                 value={showNotif}
                 style={styles.switch}
               />
-            </View>
+            </View> */}
             <TouchableOpacity
               onPress={() =>
                 Linking.openURL('https://github.com/Anikait143/Simplab')

@@ -87,18 +87,22 @@ Open a new Command Prompt window to ensure the new environment variable is loade
 ### Running React native application
 Run the following commands:
 - Clone the repo
+
 `
 git clone https://github.com/Anikait143/Simplab.git
 `
 - Change directory to simplab/Simplab_App
+
 `
 cd simplab/Simplab_App
 `
 - To install dependencies
+
 `
 npm install
 `
 - Plug in your physical device in to your computer using a USB cable and run
+
 `
 npx react-native run-android
 `
@@ -107,6 +111,6 @@ npx react-native run-android
 - Anikait Agrawal 19114008 [mail](mailto:anikait_a@iitr.ac.in)
 - Anshika Mittal 19114009 [mail](mailto:anshika_m@cs.iitr.ac.in)
 - Anushka Singh 19114011 [mail](mailto:anushka_s@cs.iitr.ac.in)
-- Bhupenrdra Malakar 19114022 [mail](mailto:bhupendra_m@cs.iitr.ac.in)
+- Bhupendra Malakar 19114022 [mail](mailto:bhupendra_m@cs.iitr.ac.in)
 - Devansh Joshi 19114026 [mail](mailto:devansh_j@cs.iitr.ac.in)
 - Mayank Meena 19114055 [mail](mailto:mayank_m@cs.iitr.ac.in) [website](https://mayankmeena.netlify.app/)

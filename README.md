@@ -91,7 +91,6 @@ Open a new Command Prompt window to ensure the new environment variable is loade
 - npm install
 - plug in your physical device in to your computer using a USB cable.
 - npx react-native run-android
-you are good to go. 
 
 ## Developers
 - Mayank Meena 19114055 [mail](mailto:mayank_m@cs.iitr.ac.in) [website](https://mayankmeena.netlify.app/)

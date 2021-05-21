@@ -84,7 +84,7 @@ Open a new Command Prompt window to ensure the new environment variable is loade
 - Click Edit.
 - Click New and add the path to platform-tools to the list.
 
-### Running React b=native application
+### Running React native application
 - git clone https://github.com/Anikait143/Simplab.git
 - Move directory to simplab folder
 - cd Simplab_App

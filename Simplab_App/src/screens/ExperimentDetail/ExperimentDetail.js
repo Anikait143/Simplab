@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   Alert,
+  Modal,
 } from 'react-native';
 import axios from 'axios';
 import back from '../Home/images/Vector.png';
@@ -17,8 +18,10 @@ import DocumentPicker from 'react-native-document-picker';
 
 export default function ExperimentDetail({route, navigation}) {
   const [result, onChangeResult] = React.useState('');
+  const [obs, onChangeobs] = React.useState('');
   const [singleFile, setSingleFile] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [showModal, setShowModal] = React.useState(false);
   const {state} = useContext(AuthContext);
   const exp_id = route.params.exp_id;
   const ass_id = route.params.ass_id;
@@ -34,12 +37,13 @@ export default function ExperimentDetail({route, navigation}) {
       form_data.append('assignment', ass_id);
       form_data.append('student_name', state.username);
       form_data.append('student_email', state.email);
-      form_data.append('exp_observations_image', {
-        uri: singleFile.uri,
-        name: singleFile.name,
-        type: singleFile.type,
-      });
+      // form_data.append('exp_observations_image', {
+      //   uri: singleFile.uri,
+      //   name: singleFile.name,
+      //   type: singleFile.type,
+      // });
       form_data.append('exp_result', result);
+      form_data.append('exp_obs', obs);
       console.log(form_data);
       await axios
         .post(
@@ -184,6 +188,23 @@ export default function ExperimentDetail({route, navigation}) {
             <Text>Loading your Simulation...</Text>
           )}
         </View>
+        <Modal animationType="slide" visible={showModal}>
+          {Data.source ? (
+            <WebView source={{uri: `${Data.source}`}} />
+          ) : (
+            <Text>Loading your Simulation...</Text>
+          )}
+          <TouchableOpacity
+            style={styles.button3}
+            onPress={() => setShowModal(false)}>
+            <Text>Exit</Text>
+          </TouchableOpacity>
+        </Modal>
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => setShowModal(true)}>
+          <Text>Full Screen</Text>
+        </TouchableOpacity>
         <Text style={styles.textHeading}>Aim</Text>
         <Text style={styles.text}>{Data.aim}</Text>
 
@@ -200,12 +221,24 @@ export default function ExperimentDetail({route, navigation}) {
 
         <Text style={styles.textHeading}>Precautions</Text>
         <Text style={styles.text}>{Data.precautions}</Text>
-        <Text style={styles.textHeading}>Observation</Text>
+        {/* <Text style={styles.textHeading}>Observation</Text>
         <TouchableOpacity style={styles.upload} onPress={selectFile}>
           <Text style={styles.Text}>
             {singleFile ? `${singleFile.name}` : 'Upload Files'}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <Text style={styles.textHeading}>Observations</Text>
+        <TextInput
+          style={styles.Textinput}
+          label="Password"
+          multiline={true}
+          numberOfLines={8}
+          onChangeText={text => onChangeobs(text)}
+          value={obs}
+          placeholder="Type Your Observations Here"
+          placeholderTextColor="#9C9C9C"
+        />
 
         <Text style={styles.textHeading}>Results</Text>
         <TextInput
@@ -215,7 +248,7 @@ export default function ExperimentDetail({route, navigation}) {
           numberOfLines={8}
           onChangeText={text => onChangeResult(text)}
           value={result}
-          placeholder="TYPE RESULTS HERE"
+          placeholder="Type Your Results Here"
           placeholderTextColor="#9C9C9C"
         />
 
@@ -289,6 +322,30 @@ const styles = StyleSheet.create({
     height: 37,
     width: 110,
     marginLeft: '35%',
+    color: '#fff',
+    backgroundColor: '#F37A27',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40,
+  },
+  button2: {
+    marginTop: '10%',
+    marginBottom: 20,
+    height: 37,
+    width: 110,
+    marginLeft: '35%',
+    color: '#fff',
+    backgroundColor: '#F37A27',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40,
+  },
+  button3: {
+    // marginTop: '5%',
+    marginBottom: 10,
+    height: 30,
+    width: 70,
+    marginLeft: '38%',
     color: '#fff',
     backgroundColor: '#F37A27',
     alignItems: 'center',

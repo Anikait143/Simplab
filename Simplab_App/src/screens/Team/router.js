@@ -78,7 +78,7 @@ export default function Router({route, navigation}) {
       onChangeMembers={onChangeMembers}
       addMembers={addMembers}
       onChangeaddMembers={onChangeaddMembers}
-      navigator={navigation}
+      navigation={navigation}
       text={text}
       leaveTeam={leaveTeam}
       setleaveTeam={setleaveTeam}
@@ -129,7 +129,7 @@ const NavBar = ({
   setmemVisible,
   selectedValue,
   setSelectedValue,
-  navigator,
+  navigation,
   text,
   onChangeText,
   state,
@@ -180,7 +180,7 @@ const NavBar = ({
                   )
                   .then(function (response) {
                     //console.log("done");
-                    navigator.push('Home');
+                    navigation.push('Home');
                     alert("Team deleted Successfully");
                   })
                   .catch(function (error) {
@@ -236,7 +236,7 @@ const NavBar = ({
                   )
                   .then(function (response) {
                     //console.log("done");
-                    navigator.push('Home');
+                    navigation.push('Home');
                     alert("Team left Successfully");
                   })
                   .catch(function (error) {
@@ -371,7 +371,7 @@ const NavBar = ({
         ]}>
         <TouchableOpacity
           style={{left: 20, top: 5}}
-          onPress={() => navigator.goBack()}>
+          onPress={() => navigation.goBack()}>
           <Image source={back} />
         </TouchableOpacity>
         <Text style={[styles.label, {marginLeft: 10}]}>{label}</Text>
@@ -401,7 +401,7 @@ const NavBar = ({
             <MenuItem
               style={{marginLeft: 0}}
               onPress={() => {
-                //navigator.navigate('ShowMembers');
+                //navigation.navigate('ShowMembers');
                 axios
                 .get(`https://simplab-api.herokuapp.com/api/students/${teamId}`)
                 .then(async res => {
@@ -609,7 +609,7 @@ const NavBar = ({
           </TouchableOpacity>
         ))}
       </View>
-      {viewShow(selectedValue, navigator, admin, {team_id, label})}
+      {viewShow(selectedValue, navigation, admin, {team_id, label})}
     </ImageBackground>
   </View>
 );

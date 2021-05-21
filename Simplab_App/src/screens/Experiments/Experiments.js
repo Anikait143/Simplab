@@ -45,7 +45,7 @@ export default function Experiments({navigation}) {
       minute: '2-digit',
     });
 
-    timenow = timenow.slice(0, 5) + ':00'
+    timenow = timenow.slice(0, 5) + ':00';
 
     await axios
       .get(
@@ -55,8 +55,11 @@ export default function Experiments({navigation}) {
         let complete = [];
         let assigned = [];
         res.data.map(ass => {
-          if (ass.due_date >= datenow && ass.due_time > timenow) {
+          if (ass.due_date > datenow) {
             assigned.push({...ass, isComplete: false});
+          } else if (ass.due_date == datenow) {
+            if (timenow < ass.due_time)
+              assigned.push({...ass, isComplete: false});
           } else complete.push({...ass, isComplete: true});
         });
         let DATA = [
@@ -76,7 +79,7 @@ export default function Experiments({navigation}) {
 
   useEffect(() => {
     get_assignments();
-  }, []);
+  });
 
   return (
     <View style={styles.container}>

@@ -30,40 +30,37 @@ export default function ExperimentDetail({route, navigation}) {
   const [Data, onChange] = React.useState([]);
 
   const submitAssignment = async () => {
-    if (singleFile) {
-      console.log(singleFile);
-      let form_data = new FormData();
-      form_data.append('student_id', state.token);
-      form_data.append('assignment', ass_id);
-      form_data.append('student_name', state.username);
-      form_data.append('student_email', state.email);
-      // form_data.append('exp_observations_image', {
-      //   uri: singleFile.uri,
-      //   name: singleFile.name,
-      //   type: singleFile.type,
-      // });
-      form_data.append('exp_result', result);
-      form_data.append('exp_obs', obs);
-      console.log(form_data);
-      await axios
-        .post(
-          'https://simplab-api.herokuapp.com/api/submit-assignment/',
-          form_data,
-          {
-            headers: {
-              'content-type': 'multipart/form-data',
-            },
-          },
-        )
-        .then(() => {
-          setSingleFile(null);
-          Alert.alert(
-            'Success',
-            'Assignment submited successfully. You can modify your submission till deadline.',
-          );
-        })
-        .catch(err => console.log(err));
-    }
+    console.log(singleFile);
+    let form_data = new FormData();
+    form_data.append('student_id', state.token);
+    form_data.append('assignment', ass_id);
+    form_data.append('student_name', state.username);
+    form_data.append('student_email', state.email);
+    // form_data.append('exp_observations_image', {
+    //   uri: singleFile.uri,
+    //   name: singleFile.name,
+    //   type: singleFile.type,
+    // });
+    form_data.append('exp_result', result);
+    form_data.append('exp_obs', obs);
+    console.log(form_data);
+    await axios
+      .post('https://simplab-api.herokuapp.com/api/submit-assignment/', {
+        student_id: state.token,
+        assignment: ass_id,
+        student_name: state.username,
+        student_email: state.email,
+        exp_result: result,
+        exp_obs: obs,
+      })
+      .then(() => {
+        setSingleFile(null);
+        Alert.alert(
+          'Success',
+          'Assignment submited successfully. You can modify your submission till deadline.',
+        );
+      })
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {

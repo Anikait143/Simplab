@@ -33,7 +33,7 @@ export default function Teams({navigation}) {
 
   useEffect(() => {
     team_list();
-  }, [ShowCreateTeam, ShowJoinTeam]);
+  });
 
   async function team_list() {
     return await axios

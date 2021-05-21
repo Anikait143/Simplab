@@ -9,6 +9,7 @@ const authReducer = (state, action) => {
       return {token: null, email: ''};
     case 'signin':
     case 'updateProfileImage':
+    case 'updateDetailsInApp':
     case 'signup':
       return {
         token: action.payload.token,
@@ -26,10 +27,19 @@ const authReducer = (state, action) => {
 
 const updateProfileImage = dispatch => {
   console.log('inside-image-updater');
-  return (objPayload) => {
-    console.log(objPayload)
+  return objPayload => {
     dispatch({
       type: 'updateProfileImage',
+      payload: objPayload,
+    });
+  };
+};
+
+const updateDetailsInApp = dispatch => {
+  console.log('inside-image-updater');
+  return objPayload => {
+    dispatch({
+      type: 'updateDetailsInApp',
       payload: objPayload,
     });
   };
@@ -116,6 +126,13 @@ const signout = dispatch => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signout, signup, restoreToken, updateProfileImage},
+  {
+    signin,
+    signout,
+    signup,
+    restoreToken,
+    updateProfileImage,
+    updateDetailsInApp,
+  },
   {token: null, email: ''},
 );

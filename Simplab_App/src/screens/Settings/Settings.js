@@ -22,7 +22,7 @@ import {Context as AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
 
 export default function Settings() {
-  const {state, signout} = useContext(AuthContext);
+  const {state, signout, updateDetailsInApp} = useContext(AuthContext);
   const [contact, onChangeContact] = React.useState(state.contact);
   const [email, onChangeEmail] = React.useState(state.email);
   const [organization, onChangeOrganization] = React.useState(
@@ -45,6 +45,12 @@ export default function Settings() {
         },
       )
       .then(() => {
+        updateDetailsInApp({
+          ...state,
+          email: email,
+          organization: organization,
+          contact: contact,
+        });
         Alert.alert('Success', 'Your details have been changed successfully.');
       })
       .catch(err => {

@@ -179,6 +179,7 @@ export default function Chats({navigation, team_id, team_name}) {
       })
       .then(res => {
         if (singleFile) sendRTC(res.data);
+        setSingleFile(null)
       })
       .catch(e => {
         console.log(e);

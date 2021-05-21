@@ -44,6 +44,11 @@ export default function Experiments({navigation, admin, team_id}) {
   const [DATA, setDATA] = useState([]);
   const {state} = useContext(AuthContext);
   var datenow = new Date().toISOString().slice(0, 10);
+  var timenow = new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  timenow = timenow.slice(0, 5) + ':00';
   const [datecal, onChangeDate] = React.useState(datenow);
   const [text, onChangeText] = React.useState('');
   const [val, setVal] = React.useState('Click to select an experiment');
@@ -86,7 +91,7 @@ export default function Experiments({navigation, admin, team_id}) {
           });
         });
         setSimulations(arr);
-        setAddAssShow(true)
+        setAddAssShow(true);
       })
       .catch(err => console.log(err));
   };
@@ -108,8 +113,8 @@ export default function Experiments({navigation, admin, team_id}) {
     setEditAssShow(true);
     // showeditAssign(true)
     setEditAss(item);
-    setEditAssDate(item.due_date)
-    setEditAssTime(item.due_time)
+    setEditAssDate(item.due_date);
+    setEditAssTime(item.due_time);
     await axios
       .get(`https://simplab-api.herokuapp.com/api/submissions-list/${id}`)
       .then(res => {
@@ -326,7 +331,7 @@ export default function Experiments({navigation, admin, team_id}) {
                     },
                   )
                   .then(function (response) {
-                    setAddAssShow(false)
+                    setAddAssShow(false);
                   })
                   .catch(function (error) {
                     console.log(error);
@@ -366,7 +371,7 @@ export default function Experiments({navigation, admin, team_id}) {
           <TouchableOpacity
             style={styles.crossimage}
             onPress={() => {
-              setEditAssShow(false)
+              setEditAssShow(false);
             }}>
             <Image source={cross} />
           </TouchableOpacity>
@@ -458,7 +463,7 @@ export default function Experiments({navigation, admin, team_id}) {
               mode="time"
               onConfirm={Time => {
                 setEditAssTime(Moment(Time).format('HH:mm'));
-                setDatePickerVisibility(false)
+                setDatePickerVisibility(false);
               }}
               onCancel={hideDatePicker}
             />
@@ -477,7 +482,7 @@ export default function Experiments({navigation, admin, team_id}) {
                     },
                   )
                   .then(res => {
-                    setEditAssShow(false)
+                    setEditAssShow(false);
                   })
                   .catch(e => {
                     console.log(e);
@@ -511,6 +516,7 @@ export default function Experiments({navigation, admin, team_id}) {
                 <Dropdownelement
                   key={item.id}
                   name={item.student_name}
+                  file={item.submission_file}
                   emailid={item.student_email}
                   date={item.submission_date}
                   time={item.submission_time}
@@ -527,8 +533,20 @@ export default function Experiments({navigation, admin, team_id}) {
             <TouchableOpacity
               key={item.id}
               onPress={() => {
+                console.log(datenow, timenow);
                 admin != state.token
-                  ? navigation.navigate('ExperimentDetail', {ass_id: item.id, exp_id: item.exp})
+                  ? navigation.navigate('ExperimentDetail', {
+                      ass_id: item.id,
+                      exp_id: item.exp,
+                      isCompleted:
+                        datenow < item.due_date
+                          ? false
+                          : datenow == item.due_date
+                          ? timenow < item.due_time
+                            ? false
+                            : true
+                          : true,
+                    })
                   : edit_assign(item.id, item);
               }}>
               <Item item={item} admin={admin} token={state.token} />

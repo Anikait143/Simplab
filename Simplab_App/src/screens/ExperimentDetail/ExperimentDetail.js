@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,22 @@ import {
   TextInput,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import axios from 'axios';
 import back from '../Home/images/Vector.png';
-
+import {Context as AuthContext} from '../../context/AuthContext';
 import {WebView} from 'react-native-webview';
 import DocumentPicker from 'react-native-document-picker';
 
-export default function ExperimentScreen({route, navigation}) {
+export default function ExperimentDetail({route, navigation}) {
   const [result, onChangeResult] = React.useState('');
   const [singleFile, setSingleFile] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const {state} = useContext(AuthContext);
   const exp_id = route.params.exp_id;
   const ass_id = route.params.ass_id;
+  const isCompleted = route.params.isCompleted;
 
   const [Data, onChange] = React.useState([]);
 
@@ -31,12 +34,13 @@ export default function ExperimentScreen({route, navigation}) {
       form_data.append('assignment', ass_id);
       form_data.append('student_name', state.username);
       form_data.append('student_email', state.email);
-      form_data.append('submission_file', {
+      form_data.append('exp_observations_image', {
         uri: singleFile.uri,
         name: singleFile.name,
         type: singleFile.type,
       });
       form_data.append('exp_result', result);
+      console.log(form_data);
       await axios
         .post(
           'https://simplab-api.herokuapp.com/api/post-assignment-submission/',
@@ -47,6 +51,12 @@ export default function ExperimentScreen({route, navigation}) {
             },
           },
         )
+        .then(() => {
+          Alert.alert(
+            'Success',
+            'Assignment submited successfully. You can modify your submission till deadline.',
+          );
+        })
         .catch(err => console.log(err));
     }
   };
@@ -71,7 +81,7 @@ export default function ExperimentScreen({route, navigation}) {
     try {
       const res = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
         // There can me more options as well
         // DocumentPicker.types.allFiles
         // DocumentPicker.types.images
@@ -80,7 +90,6 @@ export default function ExperimentScreen({route, navigation}) {
         // DocumentPicker.types.pdf
       });
       // Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
       // Setting the state to show single file attributes
       setSingleFile(res);
     } catch (err) {
@@ -186,10 +195,11 @@ export default function ExperimentScreen({route, navigation}) {
 
         <Text style={styles.textHeading}>Precautions</Text>
         <Text style={styles.text}>{Data.precautions}</Text>
-
         <Text style={styles.textHeading}>Observation</Text>
         <TouchableOpacity style={styles.upload} onPress={selectFile}>
-          <Text style={styles.Text}>Upload Files</Text>
+          <Text style={styles.Text}>
+            {singleFile ? `${singleFile.name}` : 'Upload Files'}
+          </Text>
         </TouchableOpacity>
 
         <Text style={styles.textHeading}>Results</Text>
@@ -204,11 +214,15 @@ export default function ExperimentScreen({route, navigation}) {
           placeholderTextColor="#9C9C9C"
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => submitAssignment()}>
-          <Text style={{fontSize: 18, color: '#fff'}}>Submit</Text>
-        </TouchableOpacity>
+        {!isCompleted ? (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => submitAssignment()}>
+            <Text style={{fontSize: 18, color: '#fff'}}>Submit</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text></Text>
+        )}
       </ScrollView>
     </View>
   );

@@ -43,8 +43,9 @@ export default function Experiments({navigation}) {
     let timenow = new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
     });
+
+    timenow = timenow.slice(0, 5) + ':00'
 
     await axios
       .get(
@@ -54,17 +55,17 @@ export default function Experiments({navigation}) {
         let complete = [];
         let assigned = [];
         res.data.map(ass => {
-          if (ass.due_date > datenow && ass.due_time > timenow) {
+          if (ass.due_date >= datenow && ass.due_time > timenow) {
             assigned.push({...ass, isComplete: false});
           } else complete.push({...ass, isComplete: true});
         });
         let DATA = [
           {
-            title: 'Assigned',
+            title: 'Due Assignments',
             data: assigned,
           },
           {
-            title: 'Completed',
+            title: 'Past Due Assignments',
             data: complete,
           },
         ];
@@ -75,10 +76,6 @@ export default function Experiments({navigation}) {
 
   useEffect(() => {
     get_assignments();
-    return () => {
-      console.log('Cleanup');
-      // setDATA([]);
-    };
   }, []);
 
   return (
@@ -100,6 +97,7 @@ export default function Experiments({navigation}) {
                       navigation.navigate('ExperimentDetail', {
                         ass_id: item.id,
                         exp_id: item.exp,
+                        isCompleted: item.isComplete,
                       })
                     }>
                     <Item item={item} />
@@ -111,6 +109,7 @@ export default function Experiments({navigation}) {
                     navigation.navigate('ExperimentDetail', {
                       ass_id: item.id,
                       exp_id: item.exp,
+                      isCompleted: item.isComplete,
                     })
                   }>
                   <Item item={item} />
